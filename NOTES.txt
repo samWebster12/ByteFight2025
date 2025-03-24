@@ -1,0 +1,23 @@
+Notes:
+Great Divide presents a particularly difficult challenge due to the need for far lookaheads to avoid suicide and trapping
+
+
+Improvements:
+    - Avoiding Death
+        - Approximate lookahead for safe moves in order to drastically extend range
+        - Potential prediction of other players moves a certain (smallish) distance ahead in order to avoid getting trapped
+        - Are we taking into account portals, enemy positions, and other weird objects?
+        - Suicides still can happen because lookahead is only based on my snake's moves not on potentially other snake's moves
+ 
+    - Attack phase
+        - Adding traps to attack phase
+        - Taking into account portal and other werid objects in order to more quickly reduce distance to opponent
+        - Pretty sure attack is based on limiting number of oppponents immediate moves. What about going beyond just immediate
+    
+    - Farming (defensive) phase
+        - make smarter
+        - maybe move away from opponent in addition to getting apples
+    
+
+    - Increase Efficency of algorithms
+  
