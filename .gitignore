@@ -1,6 +1,9 @@
 #Default Game stuff
 *.zip
-
+*.npz
+*.onnx
+workspace/deeprl/onnxrt_lib
+workspace/deeprl/tmponnx
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -25,3 +25,8 @@ Improvements:
 
 
 - We need to consider not only moves that reduce the enemy's moves by the most, but moves which force the enemy to move in a way that on the next turn or turn after next turn etc, given our optimal moves there is less moves.
+
+
+- New strategy: We go to Defensive (Go in safe circle and release traps, while waiting for opponent to make bad move for an attack) 
+when opponent approahces us and otherwise we move towards are opponent for attack. If we get low though, we farm, but opponent begins to get close while farming we go on defense
+Basically we're adding a new DEFENSE state where we loop and strategically place traps while waiting for opportunity to attack.
