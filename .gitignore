@@ -90,3 +90,5 @@ htmlcov/
 # OS files
 .DS_Store
 Thumbs.db
+
+saved_boards

@@ -20,6 +20,7 @@ def main():
     submission_dir = os.path.join(os.getcwd(), "workspace") 
     a_sub = os.path.join(submission_dir, a_name)
     b_sub = os.path.join(submission_dir, b_name)
+    print(a_sub)
 
     run_match(a_sub, b_sub, a_name, b_name, map_name)
 
