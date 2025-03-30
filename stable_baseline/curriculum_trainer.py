@@ -12,7 +12,7 @@ from stable_baselines3.common.utils import set_random_seed
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecMonitor
 
 # Import ByteFight environment
-from bytefight_env_single import SingleProcessByteFightEnv
+from rl.sb_model1.bytefight_env_single import SingleProcessByteFightEnv
 
 class CurriculumBytefightEnv(SingleProcessByteFightEnv):
     """

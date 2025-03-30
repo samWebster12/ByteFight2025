@@ -16,7 +16,7 @@ from stable_baselines3.common.utils import set_random_seed
 from stable_baselines3.common.env_checker import check_env
 
 # Import your environment from its file
-from bytefight_env_single import SingleProcessByteFightEnv
+from rl.sb_model1.bytefight_env_single import SingleProcessByteFightEnv
 
 # Attempt to import tensorboard so we don't crash if it's missing
 try:

@@ -1,5 +1,5 @@
 import json
-from bytefight_env_single import SingleProcessByteFightEnv
+from rl.sb_model1.bytefight_env_single import SingleProcessByteFightEnv
 
 # Load a map string from maps.json
 with open("maps.json") as f:

@@ -96,7 +96,7 @@ class PlayerController:
         my_len = board.get_length()
         enemy_len = board.get_length(enemy=True)
         min_size = board.get_min_player_size()
-
+        return "FARMING"
         # If I'm behind on apples or barely above min size => farm
         if (my_apples < enemy_apples) or (my_len <= min_size + 2):
             return "FARMING"

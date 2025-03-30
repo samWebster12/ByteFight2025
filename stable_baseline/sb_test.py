@@ -1,6 +1,6 @@
 import json
 from stable_baselines3 import PPO
-from bytefight_env_single import SingleProcessByteFightEnv
+from rl.sb_model1.bytefight_env_single import SingleProcessByteFightEnv
 
 # Load map from maps.json
 with open("maps.json") as f:
