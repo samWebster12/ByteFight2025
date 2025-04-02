@@ -1,38 +1,11 @@
+from utils import TinyCNN
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import os
 
-
-class TinyCNN(nn.Module):
-    def __init__(self, in_channels=6, hidden_dim=64, input_shape=(6, 32, 32)):
-        super().__init__()
-        self.conv = nn.Sequential(
-            nn.Conv2d(in_channels, 16, kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.Conv2d(16, 32, kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.Flatten()
-        )
-
-        # Get flattened size by doing a dummy forward pass
-        with torch.no_grad():
-            dummy = torch.zeros(1, *input_shape)
-            flattened_dim = self.conv(dummy).shape[1]
-
-        self.fc = nn.Sequential(
-            nn.Linear(flattened_dim, hidden_dim),
-            nn.ReLU(),
-            nn.Linear(hidden_dim, 1)
-        )
-    
-    def forward(self, x):
-        x = self.conv(x)
-        return self.fc(x)
-
-
-def load_dataset(save_dir="saved_chunks"):
+def load_dataset(save_dir="data"):
     X_list = []
     Y_list = []
 
@@ -47,37 +20,38 @@ def load_dataset(save_dir="saved_chunks"):
     print(f"Loaded dataset: X={X.shape}, Y={Y.shape}")
     return X, Y
 
-
-# -------------------------------
-# Main training loop
-# -------------------------------
+# Load data
 X, Y = load_dataset()
-X_torch = torch.from_numpy(X).float()  # (N, 6, H, W)
-y_torch = torch.from_numpy(Y).float().unsqueeze(1)  # (N, 1)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Wrap the model
+# Initialize model first (not wrapped in DataParallel)
 model = TinyCNN(input_shape=X.shape[1:])
-model = nn.DataParallel(model)   # 🔥 Use all available GPUs
 model = model.to(device)
 
-# Data
+# Wrap with DataParallel for training on multiple GPUs
+parallel_model = nn.DataParallel(model)
+
+# Data preparation
 X_torch = torch.from_numpy(X).float().to(device)
 y_torch = torch.from_numpy(Y).float().unsqueeze(1).to(device)
 
-# Optimizer and loss
-optimizer = optim.Adam(model.parameters(), lr=1e-3)
+# Training setup
+optimizer = optim.Adam(parallel_model.parameters(), lr=1e-3)
 loss_fn = nn.MSELoss()
+NUM_EPOCHS = 1000
 
 # Training loop
-for epoch in range(1, 1001):
-    model.train()
+for epoch in range(1, NUM_EPOCHS + 1):
+    parallel_model.train()
     optimizer.zero_grad()
-    preds = model(X_torch)   # Will auto split across GPUs
+    preds = parallel_model(X_torch)
     loss = loss_fn(preds, y_torch)
     loss.backward()
     optimizer.step()
 
     if epoch % 100 == 0:
         print(f"[Epoch {epoch}] Loss: {loss.item():.4f}")
+
+# ✅ Save only the base model's weights — no "module." prefixes!
+torch.save(model.state_dict(), "tiny_cnn_weights.pt")

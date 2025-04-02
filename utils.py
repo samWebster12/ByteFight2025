@@ -5,6 +5,8 @@ import random
 import numpy as np
 import uuid
 import os
+import torch
+import torch.nn as nn
 
 def evaluate_position(b) -> float:
         if b.is_game_over():
@@ -34,3 +36,56 @@ def evaluate_position(b) -> float:
         score +=  0.1 * (my_time   - opp_time)
 
         return score
+
+def board_to_features(b: player_board.PlayerBoard) -> np.ndarray:
+    H, W = b.get_dim_y(), b.get_dim_x()
+    walls    = np.zeros((H, W), dtype=np.float32)
+    my_snake = np.zeros((H, W), dtype=np.float32)
+    en_snake = np.zeros((H, W), dtype=np.float32)
+    apples   = np.zeros((H, W), dtype=np.float32)
+    my_traps = np.zeros((H, W), dtype=np.float32)
+    en_traps = np.zeros((H, W), dtype=np.float32)
+
+    walls[b.game_board.map.cells_walls > 0] = 1
+
+    # Always from *current* player's perspective
+    p_mask = b.get_snake_mask(my_snake=True, enemy_snake=False)
+    my_snake[(p_mask == Cell.PLAYER_BODY.value) | (p_mask == Cell.PLAYER_HEAD.value)] = 1
+
+    e_mask = b.get_snake_mask(my_snake=False, enemy_snake=True)
+    en_snake[(e_mask == Cell.ENEMY_BODY.value) | (e_mask == Cell.ENEMY_HEAD.value)] = 1
+
+    apples[b.get_apple_mask() > 0] = 1
+
+    my_traps[b.get_trap_mask(my_traps=True, enemy_traps=False) > 0] = 1
+    en_traps[b.get_trap_mask(my_traps=False, enemy_traps=True) > 0] = 1
+
+    return np.stack([walls, my_snake, en_snake, apples, my_traps, en_traps], axis=0)  # shape (6, H, W)
+
+class TinyCNN(nn.Module):
+    def __init__(self, in_channels=6, hidden_dim=64, input_shape=(6, 32, 32)):
+        super().__init__()
+        self.conv = nn.Sequential(
+            nn.Conv2d(in_channels, 16, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(16, 32, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Flatten()
+        )
+
+        # Get flattened size by doing a dummy forward pass
+        with torch.no_grad():
+            dummy = torch.zeros(1, *input_shape)
+            flattened_dim = self.conv(dummy).shape[1]
+
+        self.fc = nn.Sequential(
+            nn.Linear(flattened_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, 1),
+            nn.Tanh()  # constrain output to [-1, 1]
+        )
+
+    
+    def forward(self, x):
+        x = self.conv(x)
+        return self.fc(x)
