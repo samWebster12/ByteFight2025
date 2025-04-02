@@ -141,6 +141,7 @@ class ByteFightSnakeEnv(gym.Env):
         self.player_a_time_left = pb_a.get_time_left(enemy=False)
         self.player_b_time_left = pb_a.get_time_left(enemy=True)
 
+        # Follow the exact tiebreak rules from ByteFight
         if self.player_a_apples > self.player_b_apples:
             return Result.PLAYER_A
         elif self.player_b_apples > self.player_a_apples:
@@ -307,19 +308,12 @@ class ByteFightSnakeEnv(gym.Env):
         if self.done:
             return self._last_obs, 0.0, True, False, {}
 
-        # Track state before action
-        pb_a_before = PlayerBoard(True, self.board)
-        length_before = pb_a_before.get_length(enemy=False)
-        apples_before = pb_a_before.get_apples_eaten(enemy=False)
-        opp_length_before = pb_a_before.get_length(enemy=True)
-        
-        # Track the original action mask for debugging
+        # Print out the previously computed mask
         obs_mask = self._last_obs["action_mask"]
         bool_mask = obs_mask.astype(bool)
         if self.verbose:
             print(f"[DEBUG] Current mask={bool_mask}, chosen action={action}")
 
-        # Same action mapping logic
         pb_a = PlayerBoard(True, self.board)
         my_heading = get_heading_value(pb_a, enemy=False)
         mapped_action = map_discrete_to_bytefight(action, Action(my_heading))
@@ -327,16 +321,22 @@ class ByteFightSnakeEnv(gym.Env):
         reward = 0.0
         truncated = False
 
+        # IMPORTANT: Calculate sacrifice BEFORE applying the move
+        # First move has no sacrifice, subsequent moves follow the formula
+        if mapped_action != "END_TURN" and mapped_action != Action.TRAP:
+            if self.move_counter == 1:
+                self.current_sacrifice = 0  # First move has no sacrifice
+            else:
+                # For subsequent moves, sacrifice increases by 2 for each move after the first
+                self.current_sacrifice = (self.move_counter - 1) * 2
+
         if self.verbose:
             print(f"[DEBUG STEP] turn={self.turn_counter} move={self.move_counter} "
                 f"agent_action={action} => mapped_action={mapped_action} heading={my_heading} "
                 f"sacrifice={self.current_sacrifice}")
 
-        # Small reward just for surviving each step
-        reward += 0.01
-        
         if mapped_action == "END_TURN":
-            # After player A finishes their turn
+            # Reset counters at end of turn
             self.turn_counter += 1
             self.move_counter = 1
             self.current_sacrifice = 0
@@ -395,16 +395,6 @@ class ByteFightSnakeEnv(gym.Env):
                 reward = 1.0
                 self.done = True
                 self.winner = Result.PLAYER_A
-            
-             # After player B's turn, check if we gained an advantage
-            if not self.done:
-                pb_a_after = PlayerBoard(True, self.board)
-                opp_length_after = pb_a_after.get_length(enemy=True)
-                
-                # Reward if opponent's length decreased (e.g., hit a trap or made bad moves)
-                length_delta_opp = opp_length_after - opp_length_before
-                if length_delta_opp < 0:
-                    reward += 0.5 * abs(length_delta_opp)
 
         else:
             if mapped_action == Action.TRAP:
@@ -416,9 +406,11 @@ class ByteFightSnakeEnv(gym.Env):
                     self.done = True
                     self.winner = Result.PLAYER_B
             else:
+                # Apply the move with the calculated sacrifice
+                
                 success = self.board.apply_move(
                     mapped_action,
-                    sacrifice=self.current_sacrifice,
+                    sacrifice=self.current_sacrifice + 1,
                     a_to_play=True
                 )
                 if not success:
@@ -428,59 +420,16 @@ class ByteFightSnakeEnv(gym.Env):
                     self.done = True
                     self.winner = Result.PLAYER_B
                 else:
+                    # Increment move counter AFTER the move is applied
                     self.move_counter += 1
-                    if self.move_counter > 2:
-                        self.current_sacrifice += 2
-
+                    
+            # Check if the snake's length is below minimum
             if pb_a.get_length(enemy=False) < pb_a.get_min_player_size():
                 if self.verbose:
                     print("[DEBUG STEP] Snake length < min => we died")
                 reward = -1.0
                 self.done = True
                 self.winner = Result.PLAYER_B
-
-
-            # After the action is applied, calculate rewards
-            if not self.done:
-                pb_a_after = PlayerBoard(True, self.board)
-                length_after = pb_a_after.get_length(enemy=False)
-                apples_after = pb_a_after.get_apples_eaten(enemy=False)
-                
-                # Reward for increasing length
-                length_delta = length_after - length_before
-                if length_delta > 0:
-                    reward += 1.0 * length_delta
-                
-                # Reward for eating apples
-                apples_delta = apples_after - apples_before
-                if apples_delta > 0:
-                    reward += 2.0 * apples_delta
-                
-                # Small penalty for sacrificing length on multiple moves
-                # (but not when placing traps, which is strategic)
-                if mapped_action != Action.TRAP and length_delta < 0:
-                    reward += 0.2 * length_delta  # Smaller penalty than the benefit
-                
-                # Reward for successful trap placement
-                if mapped_action == Action.TRAP and not self.done:
-                    reward += 0.5
-                
-                # Reward for efficient movement (using fewer moves per turn)
-                if self.move_counter <= 2:
-                    reward += 0.1
-        
-        if self.done:
-            if self.winner == Result.PLAYER_A:
-                # Bigger bonus for winning
-                reward += 5.0
-                # Additional reward for winning quickly
-                reward += 0.01 * (2000 - self.turn_counter)
-            elif self.winner == Result.PLAYER_B:
-                # Penalty for losing
-                reward -= 3.0
-            else:  # TIE
-                # Small reward for tying
-                reward += 0.5
 
         obs = self._build_observation()
         self._last_obs = obs
@@ -530,11 +479,13 @@ class ByteFightSnakeEnv(gym.Env):
             decay_applied = True
         elif self.turn_counter >= 1600 and self.turn_counter % 10 == 0:
             decay_applied = True
-        elif self.turn_counter >= 1000 and self.turn_counter % 15 == 0:
+        elif self.turn_counter >= 1000 and self.turn_counter % 15 == 0:  # <-- Check this condition
             decay_applied = True
 
-        pb_a = PlayerBoard(True, self.board)
         if decay_applied:
+            # Make sure decay is actually being applied here
+            self.board.apply_decay(check_validity=True)
+            pb_a = PlayerBoard(True, self.board)
             try:
                 before_len = pb_a.get_length(enemy=False)
                 self.board.apply_decay(check_validity=True, a_to_play=True)

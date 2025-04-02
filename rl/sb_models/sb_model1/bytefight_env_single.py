@@ -237,7 +237,7 @@ class SingleProcessByteFightEnv(gym.Env):
                 step_reward += 1.0  # tie
 
         info = {
-            "winner": self._winner.name if self._winner else None,
+            "winner": self._winner.name if self._winner is not None else None,
             "turn_count": self._board.turn_count,
             "agent_length": self._agent_prev_length,
             "opponent_length": self._opp_prev_length,
@@ -274,7 +274,7 @@ class SingleProcessByteFightEnv(gym.Env):
             else:
                 final_reward = 1.0
         info = {
-            "winner": self._winner.name if self._winner else None,
+            "winner": self._winner.name if self._winner is not None else None,
             "turn_count": self._board.turn_count,
             "agent_length": self._agent_prev_length,
             "opponent_length": self._opp_prev_length,

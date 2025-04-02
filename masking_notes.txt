@@ -1,0 +1,140 @@
+Introduction
+I worked on an environment where specific actions are not available at every timestep 
+ when I started deep reinforcement learning.
+
+Let’s illustrate the concept of impossible or unavailable action concretely:
+
+Suppose you want to develop an agent to play Mario Kart. Next, assume that the agent has an empty inventory (no banana 🍌 or anything). The agent can’t execute the action “use the object in the inventory”. Limiting the agent to a meaningful choice of actions will enable it to explore in a smarter way and output a better policy.
+
+Now that you understand the concept of impossible or unavailable action, the natural question is: “How can I manage impossible actions?" 🤔
+
+The first solution I implemented was to assign a negative reward if the agent takes an impossible action. It performed better than not constraining the choice an action, but I was not satisfied with this method as it doesn’t prevent the agent from choosing an impossible action.
+
+Then I decided to use action masking. This method is simple to implement and elegant because it constrains the agent to only take “meaningful” actions.
+
+I have learned that there are many ways to use masks throughout my deep reinforcement learning practice. Masks can be used at any level in the neural network and for different tasks. Unfortunately, few mask implementations for reinforcement learning are available except for this great article by Costa Huang [7].
+
+This blog post’s scope is to explain the concept of masking and illustrate it through figures and code. Indeed, the masks make it possible to model many constraints that we will see as we go along this blog post. Note that the whole process is entirely differentiable. In short, masks are there to simplify your life.
+
+Requirements
+A notion of the Markovian decision processes (MDP)
+Notions of policy gradient and Q-Learning algorithms
+Some knowledge of PyTorch or the basics of numpy
+A notion of self-attention. If you want to understand what this concept is, I invite you to read this great article explaining transformers [6]
+Action level
+Concept:
+
+The primary function of a mask in deep reinforcement learning is to filter out impossible or unavailable actions. For example, in Starcraft II and Dota 2 the total number of actions for each time step is 
+ and 
+, respectively. However, each time step's possible action space is a small percentage of the available action space. There are thus two advantages to using masking. The first one is to avoid giving invalid actions to the environment. The second one is that it is a simple method that helps to manage the vast spaces of action by reducing them.
+
+
+Figure 1 : Visualisation of an action mask at the logit level
+Figure 1 illustrates the principle of action masking. The idea behind it is simple, it consists of replacing the logits associated with impossible actions at 
+.
+
+Then, why applying this mask prevents the selection of impossible actions?
+
+Value-based algorithm (Q-Learning) :
+
+In the value-based approach, we select the highest estimated value of the action-value function 
+:
+
+ 
+By applying the mask, the Q-values associated with the impossible actions will be equal to 
+, so they will never be the highest value and, therefore, will never be selected.
+
+Policy based algorithm (Policy gradient) :
+
+In the policy-based approach, we sample the action according to the probability distribution at the model’s output:
+
+Therefore, it is necessary to set the probability associated with the impossible action to 0. The logits associated with the impossible action are at
+ when we apply the mask. We use the softmax function to shift from the logits to the probability domain:
+
+ 
+Considering that we have set the value of logits associated with impossible actions to 
+, the probability of sampling these actions is equal to 0 as 
+.
+
+Implementation:
+
+Now let’s practice and implement action masking for a discrete action space and a policy-based algorithm. I used the paper and the action masking code [7] from Costa Huang as a starting point. The idea is simple, we inherit the PyTorch’s Categorical class and add an optional mask argument.
+
+We replace the logits of the impossible action by 
+ when we apply the mask.
+
+However, as we are using float32 we need the minimum value represented in 32 bits. In PyTorch we get it by running torch.finfo(torch.float.dtype).min, which is -3.40e+38.
+Finally, for some policy-based approaches such as Proximal Policy Optimization (PPO) [12], it is necessary to compute the probability distribution entropy at the output of the model. In our case, we will compute the entropy of the available actions only.
+
+from typing import Optional
+
+import torch
+from torch.distributions.categorical import Categorical
+from torch import einsum
+from einops import  reduce
+
+
+class CategoricalMasked(Categorical):
+    def __init__(self, logits: torch.Tensor, mask: Optional[torch.Tensor] = None):
+        self.mask = mask
+        self.batch, self.nb_action = logits.size()
+        if mask is None:
+            super(CategoricalMasked, self).__init__(logits=logits)
+        else:
+            self.mask_value = torch.tensor(
+                torch.finfo(logits.dtype).min, dtype=logits.dtype
+            )
+            logits = torch.where(self.mask, logits, self.mask_value)
+            super(CategoricalMasked, self).__init__(logits=logits)
+
+    def entropy(self):
+        if self.mask is None:
+            return super().entropy()
+        # Elementwise multiplication
+        p_log_p = einsum("ij,ij->ij", self.logits, self.probs)
+        # Compute the entropy with possible action only
+        p_log_p = torch.where(
+            self.mask,
+            p_log_p,
+            torch.tensor(0, dtype=p_log_p.dtype, device=p_log_p.device),
+        )
+        return -reduce(p_log_p, "b a -> b", "sum", b=self.batch, a=self.nb_action)
+
+The idea of the following code blocks is to show you how to use the action mask. First, we create dummy logits and also dummy masks with the same shape.
+
+logits_or_qvalues = torch.randn((2, 3), requires_grad=True) # batch size, nb action
+print(logits_or_qvalues) 
+# tensor([[-1.8222,  1.0769, -0.6567],
+#         [-0.6729,  0.1665, -1.7856]])
+
+mask = torch.zeros((2, 3), dtype=torch.bool) # batch size, nb action
+mask[0][2] = True
+mask[1][0] = True
+mask[1][1] = True
+print(mask) # False -> mask action 
+# tensor([[False, False,  True],
+#         [ True,  True, False]])
+Then we compare action head with and without masking.
+
+head = CategoricalMasked(logits=logits_or_qvalues)
+print(head.probs) # Impossible action are not masked
+# tensor([[0.0447, 0.8119, 0.1434], There remain 3 actions available
+#         [0.2745, 0.6353, 0.0902]]) There remain 3 actions available
+
+head_masked = CategoricalMasked(logits=logits_or_qvalues, mask=mask)
+print(head_masked.probs) # Impossible action are  masked
+# tensor([[0.0000, 0.0000, 1.0000], There remain 1 actions available
+#         [0.3017, 0.6983, 0.0000]]) There remain 2 actions available
+
+print(head.entropy())
+# tensor([0.5867, 0.8601])
+
+print(head_masked.entropy())
+# tensor([-0.0000, 0.6123])
+We can observe that when we apply the mask, the probabilities associated with impossible actions are equal to 
+. Therefore, our agent will never select impossible actions.
+
+Finally, when we don’t include the impossible actions in the entropy computation, we have consistent values. This corrected entropy computation enable an agent to maximize his exploration only on valid actions.
+
+Such a cool trick!
+
