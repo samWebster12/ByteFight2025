@@ -159,6 +159,9 @@ def play_game(map_string, directory_a, directory_b, player_a_name, player_b_name
     if(not directory_b  in sys.path):
         sys.path.append(directory_b)
 
+    player_a_states = []
+    player_b_states = []
+
     init_timeout = 5
     extra_ret_time = 5
     bid_timeout = 5
@@ -224,15 +227,15 @@ def play_game(map_string, directory_a, directory_b, player_a_name, player_b_name
     if(not success_a and not success_b):
         game_board.set_winner(Result.TIE, "failed init")
         terminate_game(player_a_process, player_b_process, queues, out_queue, stop_event)
-        return game_board
+        return game_board, player_a_states, player_b_states
     elif(not success_a):
         game_board.set_winner(Result.PLAYER_B, "failed init")
         terminate_game(player_a_process, player_b_process, queues, out_queue, stop_event)
-        return game_board
+        return game_board, player_a_states, player_b_states
     elif(not success_b):
         game_board.set_winner(Result.PLAYER_A, "failed init")
         terminate_game(player_a_process, player_b_process, queues, out_queue, stop_event)
-        return game_board
+        return game_board, player_a_states, player_b_states
 
     # start actual gameplay     
     # 
@@ -261,15 +264,15 @@ def play_game(map_string, directory_a, directory_b, player_a_name, player_b_name
             if(not a_valid and not b_valid):
                 game_board.set_winner(Result.TIE, "failed bid")
                 terminate_game(player_a_process, player_b_process, queues, out_queue, stop_event)
-                return game_board
+                return game_board, player_a_states, player_b_states
             elif(not a_valid):
                 game_board.set_winner(Result.PLAYER_B, "failed bid")
                 terminate_game(player_a_process, player_b_process, queues, out_queue, stop_event)
-                return game_board
+                return game_board, player_a_states, player_b_states
             elif(not b_valid):
                 game_board.set_winner(Result.PLAYER_A, "failed bid")
                 terminate_game(player_a_process, player_b_process, queues, out_queue, stop_event)
-                return game_board
+                return game_board, player_a_states, player_b_states
             
             #finish bid
             game_board.resolve_bid(a_bid, b_bid)
@@ -287,6 +290,10 @@ def play_game(map_string, directory_a, directory_b, player_a_name, player_b_name
 
         if(game_board.is_as_turn()):
             # run a's turn
+
+            temp_board = PlayerBoard(True, game_board.get_copy(False))
+            player_a_states.append(temp_board)
+
             restart_process_and_children(player_a_process, limit_resources)
             moves, timer = run_timed_play(player_a_process, True, game_board, game_board.get_a_time(), extra_ret_time, player_a_q, main_q)
             pause_process_and_children(player_a_process, limit_resources)
@@ -314,6 +321,10 @@ def play_game(map_string, directory_a, directory_b, player_a_name, player_b_name
 
         else:
             # run b's turn
+
+            temp_board = PlayerBoard(False, game_board.get_copy(False))
+            player_b_states.append(temp_board)
+
             restart_process_and_children(player_b_process, limit_resources)
             moves, timer = run_timed_play(player_b_process, False, game_board, game_board.get_b_time(), extra_ret_time, player_b_q, main_q)
             pause_process_and_children(player_b_process, limit_resources)
@@ -344,7 +355,7 @@ def play_game(map_string, directory_a, directory_b, player_a_name, player_b_name
 
         if(not game_board.get_winner() is None):
             terminate_game(player_a_process, player_b_process, queues, out_queue, stop_event)
-            return game_board
+            return game_board, player_a_states, player_b_states
                 
     
     #last tiebreak based on time (beat other player by error seconds, buffer error of 5s given for potential latency)
@@ -360,7 +371,7 @@ def play_game(map_string, directory_a, directory_b, player_a_name, player_b_name
                 game_board.set_winner(Result.TIE, "tiebreak")
 
     terminate_game(player_a_process, player_b_process, queues, out_queue, stop_event)
-    return game_board
+    return game_board, player_a_states, player_b_states
 
 
 # closes down player processes

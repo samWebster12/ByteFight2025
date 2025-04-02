@@ -20,7 +20,6 @@ def main():
     submission_dir = os.path.join(os.getcwd(), "workspace") 
     a_sub = os.path.join(submission_dir, a_name)
     b_sub = os.path.join(submission_dir, b_name)
-    print(a_sub)
 
     run_match(a_sub, b_sub, a_name, b_name, map_name)
 
@@ -47,15 +46,21 @@ def run_match(a_sub, b_sub, a_name, b_name, map_name):
 
     for _ in range(1):
         sim_time = time.perf_counter()
-        final_board = play_game(map_string, a_sub, b_sub, a_name, b_name, display_game=False, clear_screen = True, record=True, limit_resources=False)
+        final_board, player_a_states, player_b_states = play_game(map_string, a_sub, b_sub, a_name, b_name, display_game=False, clear_screen = True, record=True, limit_resources=False)
 
+        label = ""
 
         if (final_board.get_winner()== Result.PLAYER_A):
             print("a won by "+final_board.get_win_reason())
+            label = "A"
+
         elif(final_board.get_winner() == Result.PLAYER_B):
             print("b won by "+final_board.get_win_reason())
+            label = "B"
+
         elif(final_board.get_winner() == Result.TIE):
             print("tie by "+final_board.get_win_reason())
+            label = ""
 
         sim_time = time.perf_counter() - sim_time
         turn_count = final_board.turn_count
@@ -69,6 +74,8 @@ def run_match(a_sub, b_sub, a_name, b_name, map_name):
         out_file = 'result.json'
         with open(os.path.join(out_dir, out_file), 'w') as fp:
             fp.write(final_board.get_history_json())
+        
+        return player_a_states, player_b_states, label
 
 
 if __name__=="__main__":
