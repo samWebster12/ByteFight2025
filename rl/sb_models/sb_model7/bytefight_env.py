@@ -239,7 +239,8 @@ class ByteFightSnakeEnv(gym.Env):
 
         # Get trap masks
         my_trap_mask = (pb_a.get_trap_mask(my_traps=True, enemy_traps=False) > 0).astype(np.float32)
-        opp_trap_mask = (pb_a.get_trap_mask(my_traps=False, enemy_traps=True) > 0).astype(np.float32)
+        opp_trap_mask_raw = pb_a.get_trap_mask(my_traps=False, enemy_traps=True)
+        opp_trap_mask = (opp_trap_mask_raw < 0).astype(np.float32)
 
         # Get portal mask
         portal_mask_3d = pb_a.get_portal_mask(descriptive=False)
@@ -329,11 +330,19 @@ class ByteFightSnakeEnv(gym.Env):
         
         # Create a completely new board instance from scratch
         self.board = Board(self.game_map, time_to_play=110)
+        if not self.board.is_as_turn():
+            self.board.next_turn()
         
         # Reset all internal state
         self.current_actions = []
         self.done = False
         self.winner = None
+        pb_main = PlayerBoard(True, self.board)
+        pb_opp = PlayerBoard(False, self.board)
+        self._turn_start_agent_length = pb_main.get_length(enemy=False)
+        self._turn_start_agent_apples = pb_main.get_apples_eaten(enemy=False)
+        self._turn_start_opponent_length = pb_opp.get_length(enemy=False)
+        self._turn_start_opponent_apples = pb_opp.get_apples_eaten(enemy=False)
         
         # Handle bidding phase
         bidding_success = self._handle_bidding()
@@ -349,7 +358,9 @@ class ByteFightSnakeEnv(gym.Env):
         return obs, info
 
     def step(self, action: int) -> Tuple[Dict[str, np.ndarray], float, bool, bool, Dict[str, Any]]:
-        """Take an action in the environment"""
+        """Take an action with improved reward shaping, where the move penalty equals the sacrifice cost.
+        No move penalty is applied on the first move of a turn, on END_TURN, or on trap actions.
+        """
         if self.done:
             return self._last_obs, 0.0, True, False, {}
 
@@ -357,140 +368,180 @@ class ByteFightSnakeEnv(gym.Env):
         truncated = False
         info = {}
         
-        # Get the action in ByteFight format
+
+        # Get ByteFight-formatted action from the discrete action
         pb_a = PlayerBoard(True, self.forecast_board)
         my_heading = get_heading_value(pb_a, enemy=False)
         mapped_action = map_discrete_to_bytefight(action, Action(my_heading))
         
         if self.verbose:
             print(f"[DEBUG] Action {action} mapped to {mapped_action}, current actions: {self.current_actions}")
-            
-        # Handle END_TURN action
+        
+        # Handle END_TURN separately (no move penalty here)
         if mapped_action == "END_TURN":
-            # Apply all accumulated actions to the main board
+            # Apply the accumulated actions to the main board
             if self.current_actions:
                 if not self.board.is_as_turn():
                     self.board.next_turn()
-
                 success = self.board.apply_turn(self.current_actions, a_to_play=True)
                 if not success:
                     if self.verbose:
                         print("[DEBUG] Failed to apply our turn")
-                    reward = -1.0
+                    reward -= 5.0
                     self.done = True
                     self.winner = Result.PLAYER_B
                     return self._last_obs, reward, self.done, truncated, info
-                    
-                # Check if the snake's length is below minimum after our turn
+
+                # (Optional) Check if our snake’s length has fallen below the minimum after our turn
                 pb_main = PlayerBoard(True, self.board)
                 if pb_main.get_length(enemy=False) < pb_main.get_min_player_size():
                     if self.verbose:
                         print("[DEBUG] Our snake length < min after our turn")
-                    reward = -1.0
+                    reward -= 5.0
                     self.done = True
                     self.winner = Result.PLAYER_B
                     return self._last_obs, reward, self.done, truncated, info
             
-            # Process opponent's turn
+            # Process the opponent’s turn (same as before)
             try:
-                # Create a PlayerBoard for the opponent
                 pb_b = PlayerBoard(False, self.board)
                 opp_move = self.opponent_controller.play(pb_b, pb_b.get_time_left(enemy=False))
-                
                 if opp_move is None or (hasattr(opp_move, 'value') and opp_move.value == Action.FF.value):
                     if self.verbose:
                         print("[DEBUG] Opponent forfeits => We win")
-                    reward = 1.0
+                    reward += 5.0
                     self.done = True
                     self.winner = Result.PLAYER_A
                 else:
-                    # Convert to list if it's a single action
                     if isinstance(opp_move, Action) or isinstance(opp_move, int):
                         opp_move = [opp_move]
-                    
                     if self.board.is_as_turn():
                         self.board.next_turn()
-
-                    # Apply opponent's move to the board
                     success = self.board.apply_turn(opp_move, a_to_play=False)
                     if not success:
                         if self.verbose:
                             print(f"[DEBUG] Opponent made invalid move: {opp_move}")
-                        reward = 1.0
+                        reward += 5.0
                         self.done = True
                         self.winner = Result.PLAYER_A
             except Exception as e:
                 if self.verbose:
                     print(f"[DEBUG] Opponent crashed: {e}")
-                reward = 1.0
+                reward += 5.0
                 self.done = True
                 self.winner = Result.PLAYER_A
-            
-            # Reset the forecast board and current actions for the next turn
+
+            # End-of-turn shaping: (you can keep your survival bonus and delta rewards here)
+            reward += 0.05  # survival bonus
+
+            # Compute deltas from turn start (assuming these were stored at turn start)
+            pb_main = PlayerBoard(True, self.board)
+            curr_agent_length = pb_main.get_length(enemy=False)
+            curr_agent_apples = pb_main.get_apples_eaten(enemy=False)
+            agent_length_delta = curr_agent_length - self._turn_start_agent_length
+            agent_apple_delta = curr_agent_apples - self._turn_start_agent_apples
+
+            pb_opp = PlayerBoard(False, self.board)
+            curr_opp_length = pb_opp.get_length(enemy=False)
+            opp_length_delta = self._turn_start_opponent_length - curr_opp_length
+
+            if agent_length_delta > 0:
+                reward += 0.3 * agent_length_delta
+            elif agent_length_delta < 0:
+                reward += 0.3 * agent_length_delta
+
+            if agent_apple_delta > 0:
+                reward += 0.1 * agent_apple_delta  # you might reduce this to keep apple bonus lower
+
+            if opp_length_delta > 0:
+                reward += 0.3 * opp_length_delta
+
+            # Reset turn state for the next turn
             self.forecast_board = self.board.get_copy()
             self.current_actions = []
+            pb_main = PlayerBoard(True, self.board)
+            pb_opp = PlayerBoard(False, self.board)
+            self._turn_start_agent_length = pb_main.get_length(enemy=False)
+            self._turn_start_agent_apples = pb_main.get_apples_eaten(enemy=False)
+            self._turn_start_opponent_length = pb_opp.get_length(enemy=False)
+            self._turn_start_opponent_apples = pb_opp.get_apples_eaten(enemy=False)
+
         else:
-            # Add the action to our list of actions for this turn
+            # For non-END_TURN actions:
+            # If the action is a directional move (i.e. not a TRAP), add a move penalty corresponding to the extra sacrifice.
+            if mapped_action != Action.TRAP:
+                # Only apply a penalty if there are already some actions in this turn
+                if len(self.current_actions) >= 1:
+                    # According to rules, the first move has a sacrifice of 0,
+                    # the second move sacrifices 3 (net cost 2), the third sacrifices 5 (net cost 4), etc.
+                    # We'll use the extra sacrifice beyond the base 1 cell:
+                    non_trap_actions = [act for act in self.current_actions if act != Action.TRAP]
+                    additional_sacrifice = max(0, len(non_trap_actions) - 1) * 2
+                    reward -= additional_sacrifice * 0.1
+            
+            else:
+                reward -= 0.1
+
+            # Accumulate the action in the current turn
             self.current_actions.append(mapped_action)
             
-            # Update the forecast board
-            forecast_success = False
+            # Update forecast board
             if not self.board.is_as_turn():
                 self.board.next_turn()
-            
             forecast_board, forecast_success = self.board.forecast_turn(self.current_actions)
-
             if not forecast_success:
                 if self.verbose:
                     print(f"[DEBUG] Invalid forecast for action: {mapped_action}")
-                reward = -1.0
+                reward -= 5.0
                 self.done = True
                 self.winner = Result.PLAYER_B
             else:
                 if self.verbose:
                     print("[DEBUG] Forecast Success, updating board")
-                # Update our forecast board with the result
                 if not forecast_board.is_as_turn():
                     forecast_board.next_turn()
-
                 self.forecast_board = forecast_board
 
-        # Check for game over conditions
+            # Update incremental rewards immediately after this move:
+            pb_a = PlayerBoard(True, self.forecast_board)
+            curr_length = pb_a.get_length(enemy=False)
+            curr_apples = pb_a.get_apples_eaten(enemy=False)
+            length_delta = curr_length - self._turn_start_agent_length
+            apple_delta = curr_apples - self._turn_start_agent_apples
+            if length_delta > 0:
+                reward += 0.3 * length_delta
+            elif length_delta < 0:
+                reward += 0.3 * length_delta
+            if apple_delta > 0:
+                reward += 0.1 * apple_delta
+
+        # Global game-over checks
         if not self.done:
-            # Check turn limit
             if self.board.turn_count >= 2000:
                 self.done = True
                 self.winner = self._tiebreak()
                 if self.winner == Result.PLAYER_A:
-                    reward = 1.0
+                    reward += 1.0
                 elif self.winner == Result.PLAYER_B:
-                    reward = -1.0
+                    reward -= 1.0
                 else:
-                    reward = 0.0
-                
-            # Check if the board's game_over flag is set
+                    reward += 0.0
             pb_main = PlayerBoard(True, self.board)
             if pb_main.is_game_over():
                 self.done = True
                 self.winner = self.board.get_winner()
                 if self.winner == Result.PLAYER_A:
-                    reward = 1.0
+                    reward += 1.0
                 elif self.winner == Result.PLAYER_B:
-                    reward = -1.0
-                else:
-                    reward = 0.0
+                    reward -= 1.0
 
-        # Build the observation and return
         if self.done:
-            # If the game is over, use the main board for the final observation
             self.forecast_board = self.board.get_copy()
             self.current_actions = []
-            
+
         obs = self._build_observation()
         self._last_obs = obs
-        
-        # Build info dictionary
-        pb_main = PlayerBoard(True, self.board)
+        pb_main = PlayerBoard(True, self.forecast_board)
         info = {
             "winner": self.winner,
             "turn_counter": self.board.turn_count,
@@ -501,8 +552,11 @@ class ByteFightSnakeEnv(gym.Env):
             "player_b_length": pb_main.get_length(enemy=True),
             "current_actions": self.current_actions.copy()
         }
-        
-        return obs, reward, self.done, truncated, info
+
+        return obs, reward, self.done, False, info
+
+
+
 
     def render(self):
         """Render the environment (placeholder)"""

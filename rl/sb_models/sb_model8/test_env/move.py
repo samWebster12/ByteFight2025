@@ -66,14 +66,9 @@ def debug_sacrifice_mechanic(verbose=True):
     """Debug the sacrifice mechanic implementation."""
     print("======= Sacrifice Mechanic Debugger =======")
     
-    # Create a map with plenty of space
-    map_string = "19,19#3,9#15,9#9#2##100,7,Vertical#0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000#0"
-    
-    game_map = Map(map_string)
-    
     # Create the environment
     env = ByteFightSnakeEnv(
-        game_map=game_map,
+        game_maps=["empty"],
         opponent_controller=SimpleOpponent(),
         render_mode=None,
         verbose=verbose,

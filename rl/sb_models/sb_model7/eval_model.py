@@ -8,7 +8,7 @@ from stable_baselines3 import PPO
 
 # Import your custom components
 from bytefight_env import ByteFightSnakeEnv
-from custom_policy2 import ImprovedByteFightMaskedPolicy, ImprovedByteFightFeaturesExtractor
+from custom_policy3 import ByteFightMaskedPolicy, ByteFightFeaturesExtractor
 from opp_controller import OppController
 
 # ByteFight imports
@@ -80,8 +80,8 @@ def evaluate_model(model_path, map_name="empty", num_episodes=5, render=True, sa
             model_path,
             env=env,
             custom_objects={
-                "policy_class": ImprovedByteFightMaskedPolicy,
-                "features_extractor_class": ImprovedByteFightFeaturesExtractor
+                "policy_class": ByteFightMaskedPolicy,
+                "features_extractor_class": ByteFightFeaturesExtractor
             }
         )
         print("Model loaded successfully!")
@@ -217,7 +217,7 @@ def save_gameplay_video(frames_list, filename, fps=10):
 
 if __name__ == "__main__":
     # Path to the trained model
-    model_path = "models/bytefight_ppo_final2.zip"
+    model_path = "models/bytefight_ppo_400000_steps"
     
     # Evaluation settings
     map_name = "empty"  # Same map used for training

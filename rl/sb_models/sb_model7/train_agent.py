@@ -14,7 +14,9 @@ import gymnasium as gym
 
 # Import your custom components
 from bytefight_env import ByteFightSnakeEnv
-from custom_policy2 import ImprovedByteFightMaskedPolicy, ImprovedByteFightFeaturesExtractor
+#from custom_policy2 import ImprovedByteFightMaskedPolicy, ImprovedByteFightFeaturesExtractor
+from custom_policy3 import ByteFightMaskedPolicy, ByteFightFeaturesExtractor
+
 from opp_controller import OppController
 
 # Setup training parameters
@@ -129,7 +131,7 @@ if __name__ == "__main__":
     policy_kwargs = {
         "net_arch": dict(pi=[256, 128], vf=[256, 128]),  # Fixed net_arch format
         "activation_fn": torch.nn.ReLU,
-        "features_extractor_class": ImprovedByteFightFeaturesExtractor,
+        "features_extractor_class": ByteFightFeaturesExtractor,
         "features_extractor_kwargs": {
             "features_dim": 384  # This is what the improved extractor expects
         }
@@ -138,7 +140,7 @@ if __name__ == "__main__":
     # Create PPO agent with custom policy
     print("Creating PPO agent...")
     model = PPO(
-        policy=ImprovedByteFightMaskedPolicy,
+        policy=ByteFightMaskedPolicy,
         env=vec_env,
         learning_rate=3e-4,
         n_steps=2048,
@@ -174,8 +176,8 @@ if __name__ == "__main__":
             checkpoint_path,
             env=vec_env,
             custom_objects={
-                "policy_class": ImprovedByteFightMaskedPolicy,
-                "features_extractor_class": ImprovedByteFightFeaturesExtractor
+                "policy_class": ByteFightMaskedPolicy,
+                "features_extractor_class": ByteFightFeaturesExtractor
             }
         )
         print("Checkpoint loaded successfully!")
