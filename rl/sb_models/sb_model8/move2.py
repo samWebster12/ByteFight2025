@@ -25,10 +25,6 @@ class SimpleOpponent():
         return Action.NORTH
     
 
-def choose_random_dir():
-    acts = [0, 1, 2, 3, 4]
-    return random.choice(acts)
-
 def move_obs(env, i, dir):
     print(f"\n=== {i+1} Move (FORWARD) ===")
     obs, reward, done, truncated, info = env.step(dir)
@@ -75,80 +71,7 @@ def move_obs(env, i, dir):
     print(f"Opponent Body Coordinates:\n{opp_body_coords}")
 
     print("\n=== End Turn ===")
-    obs, reward, done, truncated, info = env.step(6)  # END_TURN
-
-
-
-def move(env, i, dir):
-
-    print(f"\n=== {i+1} Move (FORWARD) ===")
-    obs, reward, done, truncated, info = env.step(dir)
-
-    # Check the state after sixth move
-    pb_a = PlayerBoard(True, env.board)
-    length_after_sixth = pb_a.get_length(enemy=False)
-    head_after_sixth = pb_a.get_head_location(enemy=False)
-    
-    print(f"Length after {i} move: {length_after_sixth}")
-    print(f"Head position after {i} move: {head_after_sixth}")
-    #print(f"Current sacrifice value: {env.current_sacrifice}")
-    
-    # Debug snake's internal state
-    snake = env.board.snake_a
-    print(f"Physical length: {snake.get_unqueued_length()}")
-    print(f"Total length: {snake.get_length()}")
-    print(f"Direction: {snake.get_direction()}")
-
-    pb_b = PlayerBoard(False, env.board)
-    length_after_first = pb_b.get_length(enemy=False)
-    head_after_first = pb_b.get_head_location(enemy=False)
-    
-    print(f"\n\nOppponent Length after first move: {length_after_first}")
-    print(f"Oppponent Head position after first move: {head_after_first}")
-    #print(f"Oppponent Current sacrifice value: {env.current_sacrifice}")
-
-    # Debug snake's internal state
-    snake = env.board.snake_b
-    print(f"Oppponent Physical length: {snake.get_unqueued_length()}")
-    print(f"OppponentTotal length: {snake.get_length()}")
-    print(f"Oppponent Direction: {snake.get_direction()}")
-    
-    print("\n=== End Turn ===")
-    obs, reward, done, truncated, info = env.step(6)  # END_TURN
-
-def move_without_end_turn(env, i, dir):
-
-    print(f"\n=== {i+1} Move (FORWARD) ===")
-    obs, reward, done, truncated, info = env.step(dir)  # FORWARD again
-
-    # Check the state after sixth move
-    pb_a = PlayerBoard(True, env.board)
-    length_after_sixth = pb_a.get_length(enemy=False)
-    head_after_sixth = pb_a.get_head_location(enemy=False)
-    
-    print(f"Length after {i} move: {length_after_sixth}")
-    print(f"Head position after {i} move: {head_after_sixth}")
-    #print(f"Current sacrifice value: {env.current_sacrifice}")
-    
-    # Debug snake's internal state
-    snake = env.board.snake_a
-    print(f"Physical length: {snake.get_unqueued_length()}")
-    print(f"Total length: {snake.get_length()}")
-    print(f"Direction: {snake.get_direction()}")
-
-    pb_b = PlayerBoard(False, env.board)
-    length_after_first = pb_b.get_length(enemy=False)
-    head_after_first = pb_b.get_head_location(enemy=False)
-    
-    print(f"\n\nOppponent Length after first move: {length_after_first}")
-    print(f"Oppponent Head position after first move: {head_after_first}")
-    #print(f"Oppponent Current sacrifice value: {env.current_sacrifice}")
-
-    # Debug snake's internal state
-    snake = env.board.snake_b
-    print(f"Oppponent Physical length: {snake.get_unqueued_length()}")
-    print(f"OppponentTotal length: {snake.get_length()}")
-    print(f"Oppponent Direction: {snake.get_direction()}")
+    obs, reward, done, truncated, info = env.step(9)  # END_TURN
 
 
 
@@ -174,7 +97,7 @@ def debug_sacrifice_mechanic(verbose=True):
         if env.done:
             print("GAME OVER")
             break
-        move_obs(env, i, choose_random_dir())
+        move_obs(env, i, 0)
 
     
     # Check the state after ending turn
