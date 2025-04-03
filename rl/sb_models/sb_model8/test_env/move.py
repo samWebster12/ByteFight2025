@@ -68,7 +68,7 @@ def debug_sacrifice_mechanic(verbose=True):
     
     # Create the environment
     env = ByteFightSnakeEnv(
-        game_maps=["empty"],
+        map_names=["empty"],
         opponent_controller=SimpleOpponent(),
         render_mode=None,
         verbose=verbose,

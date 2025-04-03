@@ -5,11 +5,7 @@ import random
 import matplotlib.pyplot as plt
 
 
-# Set up parent directories for module imports
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-sys.path.insert(0, parent_dir)
-
-parent_dir = os.path.abspath(os.path.join(__file__, "../../../../.."))
+parent_dir = os.path.abspath(os.path.join(__file__, "../../../.."))
 sys.path.insert(1, parent_dir)
 
 # Import game components
@@ -161,43 +157,19 @@ def debug_sacrifice_mechanic(verbose=True):
     print("======= Sacrifice Mechanic Debugger =======")
     
     # Create a map with plenty of space
-    
-    game_map = Map(get_map_string('empty_large'))
-    
+        
     # Create the environment
     env = ByteFightSnakeEnv(
-        game_map=game_map,
+        map_names=['empty_large'],
         opponent_controller=OppController(1),
         render_mode=None,
         verbose=verbose,
         use_opponent=False
     )
     
-    # Force snake to have a specific length for easier testing
-    env.board.snake_a.start(env.board.snake_a.get_head_loc(), 10)
-    
     # Reset the environment
     obs, info = env.reset()
-    
-    # Log initial state
-    pb_a = PlayerBoard(True, env.board)
-    initial_length = pb_a.get_length(enemy=False)
-    initial_head_pos = pb_a.get_head_location(enemy=False)
-    initial_unqueued_length = pb_a.get_unqueued_length(enemy=False)
-    
-    print(f"Initial snake length: {initial_length}")
-    print(f"Initial head position: {initial_head_pos}")
-    print(f"Initial unqueued length: {initial_unqueued_length}")
-    #print(f"Initial sacrifice value: {env.current_sacrifice}")
-    
-    # Debug the snake's internal structure
-    print("\nSnake internal structure:")
-    snake = env.board.snake_a
-    # Removed the queue attribute access
-    print(f"Physical length: {snake.get_unqueued_length()}")
-    print(f"Total length: {snake.get_length()}")
-    print(f"Direction: {snake.get_direction()}")
-    
+
     for i in range(12):
         if env.done:
             print("GAME OVER")
