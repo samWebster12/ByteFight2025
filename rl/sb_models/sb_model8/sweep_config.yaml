@@ -1,0 +1,40 @@
+program: wandb_sweep.py
+method: bayes
+metric:
+  name: average_reward
+  goal: maximize
+parameters:
+  learning_rate:
+    distribution: uniform
+    min: 1e-5
+    max: 1e-3
+  n_steps:
+    values: [1024, 2048, 4096]
+  batch_size:
+    values: [32, 64, 128]
+  n_epochs:
+    values: [3, 5, 10]
+  gamma:
+    distribution: uniform
+    min: 0.95
+    max: 0.999
+  gae_lambda:
+    distribution: uniform
+    min: 0.90
+    max: 0.99
+  clip_range:
+    distribution: uniform
+    min: 0.1
+    max: 0.3
+  ent_coef:
+    distribution: uniform
+    min: 0.001
+    max: 0.02
+  vf_coef:
+    distribution: uniform
+    min: 0.1
+    max: 1.0
+  max_grad_norm:
+    distribution: uniform
+    min: 0.3
+    max: 1.0

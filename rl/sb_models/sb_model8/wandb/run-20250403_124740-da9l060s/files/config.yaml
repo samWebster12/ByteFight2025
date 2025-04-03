@@ -1,0 +1,417 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    python_version: 3.11.9
+    cli_version: 0.19.9
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1743698860
+    t:
+      1:
+      - 1
+      - 2
+      - 3
+      - 55
+      2:
+      - 1
+      - 2
+      - 3
+      - 55
+      3:
+      - 14
+      - 16
+      - 22
+      - 23
+      - 37
+      4: 3.11.9
+      5: 0.19.9
+      8:
+      - 3
+      - 5
+      13: windows-amd64
+learning_rate:
+  desc: null
+  value: 0.0009202942640686792
+n_steps:
+  desc: null
+  value: 4096
+batch_size:
+  desc: null
+  value: 64
+n_epochs:
+  desc: null
+  value: 3
+gamma:
+  desc: null
+  value: 0.9723448182405616
+gae_lambda:
+  desc: null
+  value: 0.9497329456260896
+clip_range:
+  desc: null
+  value: 0.1053462982497052
+ent_coef:
+  desc: null
+  value: 0.007917380522120192
+vf_coef:
+  desc: null
+  value: 0.3715473933041979
+max_grad_norm:
+  desc: null
+  value: 0.9741686115835226
+algo:
+  desc: null
+  value: PPO
+policy_class:
+  desc: null
+  value: <class 'custom_policy3.ByteFightMaskedPolicy'>
+device:
+  desc: null
+  value: cuda
+verbose:
+  desc: null
+  value: 1
+policy_kwargs:
+  desc: null
+  value: '{''net_arch'': {''pi'': [256, 128], ''vf'': [256, 128]}, ''activation_fn'':
+    <class ''torch.nn.modules.activation.ReLU''>, ''features_extractor_class'': <class
+    ''custom_policy3.ByteFightFeaturesExtractor''>, ''features_extractor_kwargs'':
+    {''features_dim'': 256}}'
+num_timesteps:
+  desc: null
+  value: 0
+_total_timesteps:
+  desc: null
+  value: 1600000
+_num_timesteps_at_start:
+  desc: null
+  value: 0
+seed:
+  desc: null
+  value: 42
+action_noise:
+  desc: null
+  value: None
+start_time:
+  desc: null
+  value: 1743698878628164100
+tensorboard_log:
+  desc: null
+  value: ./logs
+_last_obs:
+  desc: null
+  value: "{'action_mask': array([[0, 0, 0, 0, 0, 1, 1, 0, 0, 0],\n       [1, 1, 1,\
+    \ 1, 1, 1, 1, 1, 0, 0],\n       [1, 1, 1, 1, 1, 1, 1, 1, 0, 0],\n       [1, 1,\
+    \ 1, 1, 1, 1, 1, 1, 0, 0],\n       [1, 1, 1, 1, 1, 1, 1, 1, 0, 0],\n       [0,\
+    \ 1, 1, 1, 0, 1, 0, 1, 0, 0],\n       [1, 1, 1, 1, 1, 1, 1, 1, 0, 0],\n      \
+    \ [1, 1, 1, 1, 1, 1, 1, 1, 0, 0]], dtype=uint8), 'board_image': array([[[[0.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n       \
+    \  [0., 0., 0., ..., 0., 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0.,\
+    \ 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ...,\
+    \ 0., 0., 0.]],\n\n        [[0., 0., 0., ..., 0., 0., 0.],\n         [0., 0.,\
+    \ 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         ...,\n\
+    \         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n\
+    \         [0., 0., 0., ..., 0., 0., 0.]],\n\n        [[0., 0., 0., ..., 0., 0.,\
+    \ 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0.,\
+    \ 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.]],\n\n    \
+    \    ...,\n\n        [[0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ...,\
+    \ 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         ...,\n     \
+    \    [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n\
+    \         [0., 0., 0., ..., 0., 0., 0.]],\n\n        [[0., 0., 0., ..., 0., 0.,\
+    \ 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0.,\
+    \ 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.]],\n\n    \
+    \    [[1., 1., 1., ..., 0., 0., 0.],\n         [1., 1., 1., ..., 0., 0., 0.],\n\
+    \         [1., 1., 1., ..., 0., 0., 0.],\n         ...,\n         [0., 0., 0.,\
+    \ ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0.,\
+    \ 0., ..., 0., 0., 0.]]],\n\n\n       [[[1., 1., 1., ..., 0., 0., 0.],\n     \
+    \    [1., 1., 1., ..., 0., 0., 0.],\n         [1., 1., 1., ..., 0., 0., 0.],\n\
+    \         ...,\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0.,\
+    \ ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.]],\n\n        [[0.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n       \
+    \  [0., 0., 0., ..., 0., 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0.,\
+    \ 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ...,\
+    \ 0., 0., 0.]],\n\n        [[0., 0., 0., ..., 0., 0., 0.],\n         [0., 0.,\
+    \ 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         ...,\n\
+    \         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n\
+    \         [0., 0., 0., ..., 0., 0., 0.]],\n\n        ...,\n\n        [[0., 0.,\
+    \ 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0., 0.,\
+    \ 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0.,\
+    \ 0., 0.]],\n\n        [[0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0.,\
+    \ ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         ...,\n\
+    \         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n\
+    \         [0., 0., 0., ..., 0., 0., 0.]],\n\n        [[1., 1., 1., ..., 0., 0.,\
+    \ 0.],\n         [1., 1., 1., ..., 0., 0., 0.],\n         [1., 1., 1., ..., 0.,\
+    \ 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.]]],\n\n\n \
+    \      [[[0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n\
+    \         [0., 0., 0., ..., 0., 0., 0.],\n         ...,\n         [0., 0., 0.,\
+    \ ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0.,\
+    \ 0., ..., 0., 0., 0.]],\n\n        [[0., 0., 0., ..., 0., 0., 0.],\n        \
+    \ [0., 0., 2., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n  \
+    \       ...,\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ...,\
+    \ 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.]],\n\n        [[0., 0.,\
+    \ 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0., 0.,\
+    \ 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0.,\
+    \ 0., 0.]],\n\n        ...,\n\n        [[0., 0., 0., ..., 0., 0., 0.],\n     \
+    \    [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n\
+    \         ...,\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0.,\
+    \ ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.]],\n\n        [[0.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n       \
+    \  [0., 0., 0., ..., 0., 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0.,\
+    \ 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ...,\
+    \ 0., 0., 0.]],\n\n        [[1., 1., 1., ..., 0., 0., 0.],\n         [1., 1.,\
+    \ 1., ..., 0., 0., 0.],\n         [1., 1., 1., ..., 0., 0., 0.],\n         ...,\n\
+    \         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n\
+    \         [0., 0., 0., ..., 0., 0., 0.]]],\n\n\n       ...,\n\n\n       [[[1.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n       \
+    \  [0., 0., 1., ..., 0., 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0.,\
+    \ 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ...,\
+    \ 0., 0., 0.]],\n\n        [[0., 0., 0., ..., 0., 0., 0.],\n         [2., 0.,\
+    \ 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         ...,\n\
+    \         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n\
+    \         [0., 0., 0., ..., 0., 0., 0.]],\n\n        [[0., 0., 0., ..., 0., 0.,\
+    \ 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0.,\
+    \ 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.]],\n\n    \
+    \    ...,\n\n        [[0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ...,\
+    \ 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         ...,\n     \
+    \    [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n\
+    \         [0., 0., 0., ..., 0., 0., 0.]],\n\n        [[0., 0., 0., ..., 0., 0.,\
+    \ 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0.,\
+    \ 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.]],\n\n    \
+    \    [[1., 1., 1., ..., 0., 0., 0.],\n         [1., 1., 1., ..., 0., 0., 0.],\n\
+    \         [1., 1., 1., ..., 0., 0., 0.],\n         ...,\n         [0., 0., 0.,\
+    \ ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0.,\
+    \ 0., ..., 0., 0., 0.]]],\n\n\n       [[[0., 0., 0., ..., 0., 0., 0.],\n     \
+    \    [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n\
+    \         ...,\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0.,\
+    \ ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.]],\n\n        [[0.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n       \
+    \  [0., 0., 0., ..., 0., 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0.,\
+    \ 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ...,\
+    \ 0., 0., 0.]],\n\n        [[0., 0., 0., ..., 0., 0., 0.],\n         [0., 0.,\
+    \ 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         ...,\n\
+    \         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n\
+    \         [0., 0., 0., ..., 0., 0., 0.]],\n\n        ...,\n\n        [[0., 0.,\
+    \ 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0., 0.,\
+    \ 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0.,\
+    \ 0., 0.]],\n\n        [[0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0.,\
+    \ ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         ...,\n\
+    \         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n\
+    \         [0., 0., 0., ..., 0., 0., 0.]],\n\n        [[1., 1., 1., ..., 0., 0.,\
+    \ 0.],\n         [1., 1., 1., ..., 0., 0., 0.],\n         [1., 1., 1., ..., 0.,\
+    \ 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.]]],\n\n\n \
+    \      [[[1., 1., 1., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n\
+    \         [0., 0., 0., ..., 0., 0., 0.],\n         ...,\n         [0., 0., 0.,\
+    \ ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0.,\
+    \ 0., ..., 0., 0., 0.]],\n\n        [[0., 0., 0., ..., 0., 0., 0.],\n        \
+    \ [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n  \
+    \       ...,\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ...,\
+    \ 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.]],\n\n        [[0., 0.,\
+    \ 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0., 0.,\
+    \ 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0.,\
+    \ 0., 0.]],\n\n        ...,\n\n        [[0., 0., 0., ..., 0., 0., 0.],\n     \
+    \    [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n\
+    \         ...,\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0.,\
+    \ ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.]],\n\n        [[0.,\
+    \ 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n       \
+    \  [0., 0., 0., ..., 0., 0., 0.],\n         ...,\n         [0., 0., 0., ..., 0.,\
+    \ 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ...,\
+    \ 0., 0., 0.]],\n\n        [[1., 1., 1., ..., 0., 0., 0.],\n         [1., 1.,\
+    \ 1., ..., 0., 0., 0.],\n         [1., 1., 1., ..., 0., 0., 0.],\n         ...,\n\
+    \         [0., 0., 0., ..., 0., 0., 0.],\n         [0., 0., 0., ..., 0., 0., 0.],\n\
+    \         [0., 0., 0., ..., 0., 0., 0.]]]], dtype=float32), 'features': array([[\
+    \ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,\n         0.,\
+    \  0.],\n       [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., \
+    \ 0.,\n         0.,  0.],\n       [ 0.,  0.,  0.,  0.,  0.,  1.,  1.,  1.,  1.,\
+    \  0.,  0.,  1.,  1.,\n         0.,  0.],\n       [ 0.,  0.,  0.,  0.,  0.,  1.,\
+    \  1.,  1.,  1.,  0.,  0.,  1.,  1.,\n         0.,  0.],\n       [ 0.,  0.,  0.,\
+    \  0.,  0., -1., -1., -1., -1.,  0.,  0., -1., -1.,\n         0.,  0.],\n    \
+    \   [ 0.,  0.,  0.,  0.,  0., -1., -1., -1., -1.,  0.,  0., -1., -1.,\n      \
+    \   0.,  0.],\n       [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,\
+    \  0.,  0.,\n         0.,  0.],\n       [ 0.,  0.,  0.,  0.,  0., -1., -1., -1.,\
+    \ -1.,  0.,  0., -1., -1.,\n         0.,  0.]], dtype=float32)}"
+_last_episode_starts:
+  desc: null
+  value: '[ True  True  True  True  True  True  True  True]'
+_last_original_obs:
+  desc: null
+  value: None
+_episode_num:
+  desc: null
+  value: 0
+use_sde:
+  desc: null
+  value: 'False'
+sde_sample_freq:
+  desc: null
+  value: -1
+_current_progress_remaining:
+  desc: null
+  value: 1.0
+_stats_window_size:
+  desc: null
+  value: 100
+ep_info_buffer:
+  desc: null
+  value: deque([], maxlen=100)
+ep_success_buffer:
+  desc: null
+  value: deque([], maxlen=100)
+_n_updates:
+  desc: null
+  value: 0
+_custom_logger:
+  desc: null
+  value: 'False'
+env:
+  desc: null
+  value: <stable_baselines3.common.vec_env.subproc_vec_env.SubprocVecEnv object at
+    0x000001D2FB4F6FD0>
+_vec_normalize_env:
+  desc: null
+  value: None
+observation_space:
+  desc: null
+  value: 'Dict(''action_mask'': Box(0, 1, (10,), uint8), ''board_image'': Box(0.0,
+    1.0, (9, 64, 64), float32), ''features'': Box(-1000000.0, 1000000.0, (15,), float32))'
+action_space:
+  desc: null
+  value: Discrete(10)
+n_envs:
+  desc: null
+  value: 8
+rollout_buffer_class:
+  desc: null
+  value: <class 'stable_baselines3.common.buffers.DictRolloutBuffer'>
+rollout_buffer_kwargs:
+  desc: null
+  value: '{}'
+clip_range_vf:
+  desc: null
+  value: None
+normalize_advantage:
+  desc: null
+  value: 'True'
+target_kl:
+  desc: null
+  value: None
+lr_schedule:
+  desc: null
+  value: <function get_schedule_fn.<locals>.<lambda> at 0x000001D2FB496340>
+rollout_buffer:
+  desc: null
+  value: <stable_baselines3.common.buffers.DictRolloutBuffer object at 0x000001D2FB4BBE90>
+policy:
+  desc: null
+  value: "ByteFightMaskedPolicy(\n  (features_extractor): ByteFightFeaturesExtractor(\n\
+    \    (cnn): Sequential(\n      (0): Conv2d(9, 32, kernel_size=(3, 3), stride=(1,\
+    \ 1), padding=(1, 1))\n      (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True,\
+    \ track_running_stats=True)\n      (2): ReLU()\n      (3): ResidualBlock(\n  \
+    \      (conv1): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1,\
+    \ 1))\n        (bn1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n\
+    \        (conv2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1,\
+    \ 1))\n        (bn2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n\
+    \      )\n      (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1,\
+    \ ceil_mode=False)\n      (5): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1),\
+    \ padding=(1, 1))\n      (6): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True,\
+    \ track_running_stats=True)\n      (7): ReLU()\n      (8): SpatialAttention(\n\
+    \        (conv): Conv2d(64, 1, kernel_size=(1, 1), stride=(1, 1))\n      )\n \
+    \     (9): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)\n\
+    \      (10): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n\
+    \      (11): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n\
+    \      (12): ReLU()\n      (13): SpatialAttention(\n        (conv): Conv2d(128,\
+    \ 1, kernel_size=(1, 1), stride=(1, 1))\n      )\n      (14): MaxPool2d(kernel_size=2,\
+    \ stride=2, padding=0, dilation=1, ceil_mode=False)\n      (15): Flatten(start_dim=1,\
+    \ end_dim=-1)\n      (16): Linear(in_features=8192, out_features=256, bias=True)\n\
+    \      (17): LayerNorm((256,), eps=1e-05, elementwise_affine=True)\n      (18):\
+    \ ReLU()\n      (19): Dropout(p=0.1, inplace=False)\n    )\n    (mlp): Sequential(\n\
+    \      (0): Linear(in_features=15, out_features=64, bias=True)\n      (1): LayerNorm((64,),\
+    \ eps=1e-05, elementwise_affine=True)\n      (2): ReLU()\n      (3): Linear(in_features=64,\
+    \ out_features=64, bias=True)\n      (4): LayerNorm((64,), eps=1e-05, elementwise_affine=True)\n\
+    \      (5): ReLU()\n      (6): Dropout(p=0.1, inplace=False)\n    )\n    (fusion):\
+    \ FeatureFusion(\n      (fuse): Sequential(\n        (0): Linear(in_features=320,\
+    \ out_features=256, bias=True)\n        (1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)\n\
+    \        (2): ReLU()\n        (3): Dropout(p=0.1, inplace=False)\n      )\n  \
+    \  )\n  )\n  (pi_features_extractor): ByteFightFeaturesExtractor(\n    (cnn):\
+    \ Sequential(\n      (0): Conv2d(9, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1,\
+    \ 1))\n      (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n\
+    \      (2): ReLU()\n      (3): ResidualBlock(\n        (conv1): Conv2d(32, 32,\
+    \ kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n        (bn1): BatchNorm2d(32,\
+    \ eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        (conv2):\
+    \ Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n        (bn2):\
+    \ BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n\
+    \      )\n      (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1,\
+    \ ceil_mode=False)\n      (5): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1),\
+    \ padding=(1, 1))\n      (6): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True,\
+    \ track_running_stats=True)\n      (7): ReLU()\n      (8): SpatialAttention(\n\
+    \        (conv): Conv2d(64, 1, kernel_size=(1, 1), stride=(1, 1))\n      )\n \
+    \     (9): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)\n\
+    \      (10): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n\
+    \      (11): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n\
+    \      (12): ReLU()\n      (13): SpatialAttention(\n        (conv): Conv2d(128,\
+    \ 1, kernel_size=(1, 1), stride=(1, 1))\n      )\n      (14): MaxPool2d(kernel_size=2,\
+    \ stride=2, padding=0, dilation=1, ceil_mode=False)\n      (15): Flatten(start_dim=1,\
+    \ end_dim=-1)\n      (16): Linear(in_features=8192, out_features=256, bias=True)\n\
+    \      (17): LayerNorm((256,), eps=1e-05, elementwise_affine=True)\n      (18):\
+    \ ReLU()\n      (19): Dropout(p=0.1, inplace=False)\n    )\n    (mlp): Sequential(\n\
+    \      (0): Linear(in_features=15, out_features=64, bias=True)\n      (1): LayerNorm((64,),\
+    \ eps=1e-05, elementwise_affine=True)\n      (2): ReLU()\n      (3): Linear(in_features=64,\
+    \ out_features=64, bias=True)\n      (4): LayerNorm((64,), eps=1e-05, elementwise_affine=True)\n\
+    \      (5): ReLU()\n      (6): Dropout(p=0.1, inplace=False)\n    )\n    (fusion):\
+    \ FeatureFusion(\n      (fuse): Sequential(\n        (0): Linear(in_features=320,\
+    \ out_features=256, bias=True)\n        (1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)\n\
+    \        (2): ReLU()\n        (3): Dropout(p=0.1, inplace=False)\n      )\n  \
+    \  )\n  )\n  (vf_features_extractor): ByteFightFeaturesExtractor(\n    (cnn):\
+    \ Sequential(\n      (0): Conv2d(9, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1,\
+    \ 1))\n      (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n\
+    \      (2): ReLU()\n      (3): ResidualBlock(\n        (conv1): Conv2d(32, 32,\
+    \ kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n        (bn1): BatchNorm2d(32,\
+    \ eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        (conv2):\
+    \ Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n        (bn2):\
+    \ BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n\
+    \      )\n      (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1,\
+    \ ceil_mode=False)\n      (5): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1),\
+    \ padding=(1, 1))\n      (6): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True,\
+    \ track_running_stats=True)\n      (7): ReLU()\n      (8): SpatialAttention(\n\
+    \        (conv): Conv2d(64, 1, kernel_size=(1, 1), stride=(1, 1))\n      )\n \
+    \     (9): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)\n\
+    \      (10): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n\
+    \      (11): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n\
+    \      (12): ReLU()\n      (13): SpatialAttention(\n        (conv): Conv2d(128,\
+    \ 1, kernel_size=(1, 1), stride=(1, 1))\n      )\n      (14): MaxPool2d(kernel_size=2,\
+    \ stride=2, padding=0, dilation=1, ceil_mode=False)\n      (15): Flatten(start_dim=1,\
+    \ end_dim=-1)\n      (16): Linear(in_features=8192, out_features=256, bias=True)\n\
+    \      (17): LayerNorm((256,), eps=1e-05, elementwise_affine=True)\n      (18):\
+    \ ReLU()\n      (19): Dropout(p=0.1, inplace=False)\n    )\n    (mlp): Sequential(\n\
+    \      (0): Linear(in_features=15, out_features=64, bias=True)\n      (1): LayerNorm((64,),\
+    \ eps=1e-05, elementwise_affine=True)\n      (2): ReLU()\n      (3): Linear(in_features=64,\
+    \ out_features=64, bias=True)\n      (4): LayerNorm((64,), eps=1e-05, elementwise_affine=True)\n\
+    \      (5): ReLU()\n      (6): Dropout(p=0.1, inplace=False)\n    )\n    (fusion):\
+    \ FeatureFusion(\n      (fuse): Sequential(\n        (0): Linear(in_features=320,\
+    \ out_features=256, bias=True)\n        (1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)\n\
+    \        (2): ReLU()\n        (3): Dropout(p=0.1, inplace=False)\n      )\n  \
+    \  )\n  )\n  (mlp_extractor): MlpExtractor(\n    (policy_net): Sequential(\n \
+    \     (0): Linear(in_features=256, out_features=128, bias=True)\n      (1): ReLU()\n\
+    \      (2): Linear(in_features=128, out_features=64, bias=True)\n      (3): ReLU()\n\
+    \    )\n    (value_net): Sequential(\n      (0): Linear(in_features=256, out_features=128,\
+    \ bias=True)\n      (1): ReLU()\n      (2): Linear(in_features=128, out_features=64,\
+    \ bias=True)\n      (3): ReLU()\n    )\n  )\n  (action_net): ActionSpecificHead(\n\
+    \    (common): Linear(in_features=64, out_features=64, bias=True)\n    (heads):\
+    \ ModuleList(\n      (0-9): 10 x Linear(in_features=64, out_features=1, bias=True)\n\
+    \    )\n  )\n  (value_net): Linear(in_features=64, out_features=1, bias=True)\n\
+    )"
+_logger:
+  desc: null
+  value: <stable_baselines3.common.logger.Logger object at 0x000001D43835DC10>
