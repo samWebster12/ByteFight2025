@@ -75,7 +75,7 @@ class PlayerController:
         if self.model is None:
             h, w = board.get_dim_y(), board.get_dim_x()
             self.model = utils.TinyCNN(input_shape=(6, h, w))
-            self.model.load_state_dict(torch.load("tiny_cnn_weights.pt", map_location=self.device))
+            self.model.load_state_dict(torch.load("cnn_weights/v1.pt", map_location=self.device))
             self.model.to(self.device)
             self.model.eval()
 
@@ -93,7 +93,7 @@ class PlayerController:
             actions.append(action)
 
         if not candidates:
-            print("[DEBUG] No valid actions. Using FF.")
+            # print("[DEBUG] No valid actions. Using FF.")
             return [Action.FF]
 
         x_batch = torch.tensor(np.array(candidates), dtype=torch.float32).to(self.device)

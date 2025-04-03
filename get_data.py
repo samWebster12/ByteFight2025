@@ -1,71 +1,76 @@
-import numpy as np
-import torch
-import torch.nn as nn
-import torch.optim as optim
-import random
-import torch
 import os
-from run_game import run_match
 import sys
-import shutil
-from game import player_board
-from game.enums import Action, Cell, Result
-from collections.abc import Callable
+import ray
 import random
 import numpy as np
-import uuid
-import os
+from run_game import run_match
 import utils
 
+ray.init()  # You can add resources like: ray.init(num_cpus=8)
+
+players = ["cnn1", "cnn2", "cnn3", "deeprl2"]
+num_games = 10000
+games_per_save = 250
+save_dir = "data"
+os.makedirs(save_dir, exist_ok=True)
+
+# Ray remote function
+@ray.remote(num_cpus=2)
+def play_and_process(a_name, b_name):
+    submission_dir = os.path.join(os.getcwd(), "workspace")
+    a_sub = os.path.join(submission_dir, a_name)
+    b_sub = os.path.join(submission_dir, b_name)
+    try:
+        player_a_moves, player_b_moves, label = run_match("workspace", "workspace", a_name, b_name, "pillars")
+    except Exception as e:
+        print(f"[ERROR] Match {a_name} vs {b_name} failed: {e}")
+        return [], []
+
+    label_a = 1.0 if label == "A" else -1.0 if label == "B" else 0.0
+    label_b = -label_a
+
+    X = [utils.board_to_features(state) for state in player_a_moves]
+    Y = [label_a] * len(X)
+    X += [utils.board_to_features(state) for state in player_b_moves]
+    Y += [label_b] * len(player_b_moves)
+
+    return X, Y
 
 def main():
-    sys.path.insert(0, os.path.join(os.getcwd(), "workspace"))
-
-    players = ["cnn", "deeprl2"]
-    num_games = 5000
-    games_per_save = 50
-
-    save_dir = "data"
-    os.makedirs(save_dir, exist_ok=True)
-
-    X = []
-    Y = []
+    X_total, Y_total = [], []
+    futures = []
 
     for game_idx in range(1, num_games + 1):
         a_name = random.choice(players)
         b_name = random.choice(players)
-        submission_dir = os.path.join(os.getcwd(), "workspace") 
-        a_sub = os.path.join(submission_dir, a_name)
-        b_sub = os.path.join(submission_dir, b_name)
+        print(f"[INFO] Submitting game {game_idx} between {a_name} and {b_name}")
+        futures.append(play_and_process.remote(a_name, b_name))
 
-        player_a_moves, player_b_moves, label = run_match(a_sub, b_sub, a_name, b_name, "pillars")
+        # Every `games_per_save` games, wait and write results
+        if len(futures) == games_per_save:
+            results = ray.get(futures)
+            futures.clear()
 
-        # Label for each player
-        label_a = 1.0 if label == "A" else -1.0 if label == "B" else 0.0
-        label_b = -label_a
+            for X_batch, Y_batch in results:
+                X_total.extend(X_batch)
+                Y_total.extend(Y_batch)
 
-        # Use every board state
-        for state in player_a_moves:
-            X.append(utils.board_to_features(state))
-            Y.append(label_a)
-
-        for state in player_b_moves:
-            X.append(utils.board_to_features(state))
-            Y.append(label_b)
-        
-        # Save every `games_per_save` games
-        if game_idx % games_per_save == 0:
             chunk_id = f"{game_idx:04d}"
             out_path = os.path.join(save_dir, f"chunk_{chunk_id}.npz")
-            np.savez_compressed(out_path, x=np.array(X), y=np.array(Y))
-            print(f"[✓] Saved {len(X)} examples to {out_path}")
-            X = []
-            Y = []
+            np.savez_compressed(out_path, x=np.array(X_total), y=np.array(Y_total))
+            print(f"[✓] Saved {len(X_total)} examples to {out_path}")
+
+            X_total = []
+            Y_total = []
+
+    # Final save
+    if X_total:
+        chunk_id = f"{num_games:04d}"
+        out_path = os.path.join(save_dir, f"chunk_{chunk_id}.npz")
+        np.savez_compressed(out_path, x=np.array(X_total), y=np.array(Y_total))
+        print(f"[✓] Saved final {len(X_total)} examples to {out_path}")
 
     print("Finished collecting all games.")
 
-
-
 if __name__ == "__main__":
     main()
-    print("Finished collecting data.")
