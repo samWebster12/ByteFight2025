@@ -30,8 +30,8 @@ SAVE_FREQ = 50_000
 LOGS_DIR = "./logs"
 MODELS_DIR = "./models"
 SNAPSHOT_DIR = os.path.join(MODELS_DIR, "league_snapshots")
-CHECKPOINT_PATH = os.path.join(MODELS_DIR, "bytefight_ppo_600000_steps.zip")  # If you have a pretrained model
-#CHECKPOINT_PATH = os.path.join(MODELS_DIR, "bytefight_ppo_600000_steps")  # If you have a pretrained model
+#CHECKPOINT_PATH = os.path.join(MODELS_DIR, "bytefight_ppo_600000_steps.zip")  # If you have a pretrained model
+CHECKPOINT_PATH = os.path.join(MODELS_DIR, "none")  # none
 
 LOG_LEVEL = 1
 

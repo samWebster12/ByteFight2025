@@ -72,28 +72,36 @@ class OpponentPool:
             json.dump(ratings, f)
         print(f"[OPPONENT POOL] Ratings saved to {file_path}")
 
-    def sample_opponent(self, main_rating=None):
+    def sample_opponent(self, main_rating=None, exclude_idx=None):
         """
         Sample an opponent from the pool.
-        If main_rating is provided, we weight snapshots so that those with ratings
+        If main_rating is provided, weight snapshots so that those with ratings
         closer to main_rating are more likely to be chosen.
-        Otherwise, uniform sampling is used.
+        The snapshot at index `exclude_idx` will be excluded (unless it’s the only snapshot).
         """
         if not self.snapshots:
             raise ValueError("Opponent pool is empty!")
         
+        # Create a list of available indices
+        available_indices = list(range(len(self.snapshots)))
+        if exclude_idx is not None and len(self.snapshots) > 1:
+            if exclude_idx in available_indices:
+                available_indices.remove(exclude_idx)
+        
         if main_rating is not None:
             tau = 350  # sensitivity parameter; adjust as needed
-            ratings = np.array([snapshot[1] for snapshot in self.snapshots])
+            # Get ratings for the available snapshots
+            ratings = np.array([self.snapshots[i][1] for i in available_indices])
             weights = np.exp(-np.abs(ratings - main_rating) / tau)
             weights = weights / np.sum(weights)
-            idx = int(np.random.choice(len(self.snapshots), p=weights))
+            chosen_index = int(np.random.choice(available_indices, p=weights))
         else:
-            idx = random.randint(0, len(self.snapshots) - 1)
+            chosen_index = random.choice(available_indices)
+        
+        opp_policy, rating, step = self.snapshots[chosen_index]
+        print(f"[OPPONENT POOL] Sampling snapshot {chosen_index}: rating = {rating}, step = {step}")
+        return opp_policy, chosen_index
 
-        opp_policy, rating, step = self.snapshots[idx]
-        # print(f"[OPPONENT POOL] Sampling snapshot {idx}: step {step}, rating {rating}")
-        return opp_policy, idx
 
     def update_rating(self, idxA, idxB, result, k_factor=32):
         """
