@@ -83,7 +83,7 @@ class OpponentPool:
             raise ValueError("Opponent pool is empty!")
         
         if main_rating is not None:
-            tau = 50.0  # sensitivity parameter; adjust as needed
+            tau = 350  # sensitivity parameter; adjust as needed
             ratings = np.array([snapshot[1] for snapshot in self.snapshots])
             weights = np.exp(-np.abs(ratings - main_rating) / tau)
             weights = weights / np.sum(weights)

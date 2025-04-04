@@ -24,7 +24,7 @@ from rating_update_callback import RatingUpdateCallback
 RANDOM_SEED = 42
 NUM_ENV = 8 #8
 TOTAL_TIMESTEPS = 2_500_000
-ITS = 55
+ITS = 200
 STEPS_PER_ITER = int(TOTAL_TIMESTEPS / ITS)
 SAVE_FREQ = 50_000
 LOGS_DIR = "./logs"
