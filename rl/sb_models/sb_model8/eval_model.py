@@ -206,11 +206,11 @@ def save_gameplay_video(frames_list, filename, fps=10):
 
 if __name__ == "__main__":
     # Path to the trained model
-    model_path = "models/it9"
+    model_path = "models/it5"
     
     # Evaluation settings
     #map_names = ["empty"]
-    num_episodes = 20
+    num_episodes = 40
     render = False
     save_video = False
     print(f"Evalutating model: {model_path}.zip")

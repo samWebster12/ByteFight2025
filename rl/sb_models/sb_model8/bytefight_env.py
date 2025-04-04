@@ -79,7 +79,8 @@ class ByteFightSnakeEnv(gym.Env):
         opponent_controller: OppController,
         render_mode: Optional[str] = None,
         use_opponent = True,
-        verbose: bool = False
+        verbose: bool = False,
+        env_id=0
     ):
         super().__init__()
         self.verbose = verbose
@@ -87,6 +88,11 @@ class ByteFightSnakeEnv(gym.Env):
         self.opponent_controller = opponent_controller
         self.render_mode = render_mode
         self.use_opponent = use_opponent
+        self.env_id = env_id
+
+        self.map_counts = {map_name: 0 for map_name in self.map_names}
+        self.map_wins = {map_name: 0 for map_name in self.map_names}
+        self.current_map_name = None
         
         # Discrete action space with 10 possible actions
         self.action_space = spaces.Discrete(10)
@@ -407,12 +413,30 @@ class ByteFightSnakeEnv(gym.Env):
         super().reset(seed=seed)
 
 
-        # Create a fresh board
-        map_name = np.random.choice(self.map_names)
-        game_map = Map(get_map_string(map_name))
+        # Weighted map selection:
+        alpha = 1.0
+        beta = 1.0
+
+        weights = []
+        for map_name in self.map_names:
+            plays = self.map_counts[map_name]
+            wins = self.map_wins[map_name]
+            # Compute estimated win rate with a Beta prior
+            estimated_win_rate = (wins + alpha) / (plays + alpha + beta)
+            # Weight maps with higher loss rate (i.e., lower estimated win rate) more heavily
+            weight = 1 - estimated_win_rate
+            weights.append(weight)
+
+        weights = np.array(weights)
+        weights = weights / weights.sum()  # Normalize the weights
+
+        selected_map_name = np.random.choice(self.map_names, p=weights)
+        self.current_map_name = selected_map_name
         
+        game_map = Map(get_map_string(self.current_map_name))
+
         #if self.verbose:
-        print(f"[DEBUG] Evaluation map: {map_name} (dimensions: {game_map.dim_x} x {game_map.dim_y})")
+        print(f"[DEBUG] Evaluation map: {self.current_map_name} (dimensions: {game_map.dim_x} x {game_map.dim_y})")
 
         self.board = Board(game_map, time_to_play=110)
         if not self.board.is_as_turn():
@@ -632,6 +656,16 @@ class ByteFightSnakeEnv(gym.Env):
             self.forecast_board = self.board.get_copy()
             self.current_actions = []
 
+            # Update map statistics here:
+            self.map_counts[self.current_map_name] += 1
+            # Assuming Result.PLAYER_A means our main agent wins (so we “lost” on that map),
+            # update wins for the opponent or vice-versa depending on your definition.
+            if self.winner == Result.PLAYER_A:
+                self.map_wins[self.current_map_name] += 1
+            # Optionally, save these statistics to a file.
+            with open(f"map_stats/map_stats_env_{self.env_id}.json", "w") as f:
+                json.dump({"map_counts": self.map_counts, "map_wins": self.map_wins}, f)
+
         obs = self._build_observation()
         self._last_obs = obs
 
@@ -644,7 +678,8 @@ class ByteFightSnakeEnv(gym.Env):
             "player_b_apples": pb_main.get_apples_eaten(enemy=True),
             "player_a_length": pb_main.get_length(enemy=False),
             "player_b_length": pb_main.get_length(enemy=True),
-            "current_actions": self.current_actions.copy()
+            "current_actions": self.current_actions.copy(),
+            "current_map": self.current_map_name
         }
 
         # --- Reward Normalization & Clipping ---

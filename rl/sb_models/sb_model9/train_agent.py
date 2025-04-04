@@ -22,7 +22,7 @@ from rating_update_callback import RatingUpdateCallback
 
 # Training parameters
 RANDOM_SEED = 42
-NUM_ENV = 1 #8
+NUM_ENV = 8 #8
 TOTAL_TIMESTEPS = 2_500_000
 ITS = 55
 STEPS_PER_ITER = int(TOTAL_TIMESTEPS / ITS)
@@ -34,6 +34,14 @@ CHECKPOINT_PATH = os.path.join(MODELS_DIR, "bytefight_ppo_600000_steps.zip")  # 
 #CHECKPOINT_PATH = os.path.join(MODELS_DIR, "bytefight_ppo_600000_steps")  # If you have a pretrained model
 
 LOG_LEVEL = 1
+
+
+# List of all available maps
+AVAILABLE_MAP_NAMES = [
+    "pillars", "great_divide", "cage", "empty", "empty_large", "ssspline",
+    "combustible_lemons", "arena", "ladder", "compasss", "recurve",
+    "diamonds", "ssspiral", "lol", "attrition"
+]
 
 # Create directories
 os.makedirs(LOGS_DIR, exist_ok=True)
@@ -94,12 +102,13 @@ def make_selfplay_env(rank, seed, opponent_pool, obs_normalizer):
     """
     def _init():
         env = ByteFightSnakeEnv(
-            map_names=["empty", "empty_large", "ssspline"],  # example
+            map_names=AVAILABLE_MAP_NAMES,  # example
             opponent_pool=opponent_pool,
             obs_normalizer=obs_normalizer,
             render_mode=None,
             use_opponent=True,
-            verbose=False
+            verbose=False,
+            env_id=rank
         )
         env = Monitor(env, os.path.join(LOGS_DIR, f"env_{rank}"))
         env.reset(seed=seed + rank)
