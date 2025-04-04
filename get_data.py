@@ -18,8 +18,6 @@ os.makedirs(save_dir, exist_ok=True)
 @ray.remote(num_cpus=2)
 def play_and_process(a_name, b_name):
     submission_dir = os.path.join(os.getcwd(), "workspace")
-    a_sub = os.path.join(submission_dir, a_name)
-    b_sub = os.path.join(submission_dir, b_name)
     try:
         player_a_moves, player_b_moves, label = run_match("workspace", "workspace", a_name, b_name, "pillars")
     except Exception as e:
@@ -29,12 +27,36 @@ def play_and_process(a_name, b_name):
     label_a = 1.0 if label == "A" else -1.0 if label == "B" else 0.0
     label_b = -label_a
 
-    X = [utils.board_to_features(state) for state in player_a_moves]
-    Y = [label_a] * len(X)
-    X += [utils.board_to_features(state) for state in player_b_moves]
-    Y += [label_b] * len(player_b_moves)
+    # Sample every 5th move
+    # player_a_moves = player_a_moves[::5]
+    # player_b_moves = player_b_moves[::5]
 
-    return X, Y
+    def process_player_moves(moves, label):
+        T = len(moves)
+        if T == 0:
+            return [], []
+        elif T == 1:
+            alpha = 1.0  # fallback if only one move
+            state = moves[0]
+            features = utils.board_to_features(state)
+            eval_score = np.clip(utils.evaluate_position(state), -100, 100) / 100.0
+            blended_label = alpha * label + (1 - alpha) * eval_score
+            return [features], [blended_label]
+
+        X, Y = [], []
+        for t, state in enumerate(moves):
+            alpha = (t / (T - 1)) ** 2
+            eval_score = np.clip(utils.evaluate_position(state), -100, 100) / 100.0
+            hybrid_label = alpha * label + (1 - alpha) * eval_score
+            X.append(utils.board_to_features(state))
+            Y.append(hybrid_label)
+        return X, Y
+
+    Xa, Ya = process_player_moves(player_a_moves, label_a)
+    Xb, Yb = process_player_moves(player_b_moves, label_b)
+
+    return Xa + Xb, Ya + Yb
+
 
 def main():
     X_total, Y_total = [], []

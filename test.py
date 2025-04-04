@@ -3,8 +3,8 @@ import ray
 from run_game import run_match
 
 # Config
-PLAYER_A = "cnn3"
-PLAYER_B = "cnn1"
+PLAYER_A = "cnn4"
+PLAYER_B = "sample_player"
 NUM_MATCHES = 100
 MAP_NAME = "pillars"
 

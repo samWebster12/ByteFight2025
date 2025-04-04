@@ -65,18 +65,23 @@ def board_to_features(b: player_board.PlayerBoard) -> np.ndarray:
 class TinyCNN(nn.Module):
     def __init__(self, input_shape):
         super().__init__()
-        self.conv = nn.Sequential(
-            nn.Conv2d(6, 32, 3, padding=1),
-            nn.BatchNorm2d(32),
-            nn.ReLU(),
-            nn.Conv2d(32, 64, 3, padding=1),
+        self.net = nn.Sequential(
+            nn.Conv2d(6, 64, kernel_size=3, padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(),
-            nn.AdaptiveAvgPool2d((1, 1))  # Global avg pool
+
+            nn.Conv2d(64, 128, kernel_size=3, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+
+            nn.Conv2d(128, 256, kernel_size=3, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+
+            nn.AdaptiveAvgPool2d((1, 1))
         )
-        self.fc = nn.Linear(64, 1)
+        self.fc = nn.Linear(256, 1)
 
     def forward(self, x):
-        x = self.conv(x)
-        x = x.view(x.size(0), -1)
-        return self.fc(x)
+        x = self.net(x)
+        return self.fc(x.view(x.size(0), -1))
