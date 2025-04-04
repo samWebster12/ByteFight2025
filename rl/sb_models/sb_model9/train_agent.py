@@ -23,7 +23,7 @@ from opp_controller import OppController
 RANDOM_SEED = 42
 NUM_ENV = 8 #8
 TOTAL_TIMESTEPS = 2_500_000
-ITS = 35
+ITS = 55
 STEPS_PER_ITER = int(TOTAL_TIMESTEPS / ITS)
 SAVE_FREQ = 50_000
 LOGS_DIR = "./logs"
@@ -206,6 +206,9 @@ def main():
         # Add a new snapshot to the pool
         opponent_pool.add_snapshot(model.policy, rating=1000, step=current_step)
         print(f"[TRAIN] After {current_step} timesteps, pool size = {len(opponent_pool.snapshots)}")
+
+        model_path = f"{MODELS_DIR}/league_its/it{iteration}"
+        model.save(model_path)
 
     # Final save
     final_model_path = os.path.join(MODELS_DIR, "bytefight_ppo_league_final")
