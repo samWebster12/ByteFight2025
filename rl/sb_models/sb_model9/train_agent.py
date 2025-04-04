@@ -17,11 +17,12 @@ from custom_policy3 import ByteFightMaskedPolicy, ByteFightFeaturesExtractor
 from normalizer import RunningNormalizer
 from opponent_pool import OpponentPool
 from opp_controller import OppController
+from rating_update_callback import RatingUpdateCallback
 # ------------------------------------------------------------------------------
 
 # Training parameters
 RANDOM_SEED = 42
-NUM_ENV = 8 #8
+NUM_ENV = 1 #8
 TOTAL_TIMESTEPS = 2_500_000
 ITS = 55
 STEPS_PER_ITER = int(TOTAL_TIMESTEPS / ITS)
@@ -29,8 +30,8 @@ SAVE_FREQ = 50_000
 LOGS_DIR = "./logs"
 MODELS_DIR = "./models"
 SNAPSHOT_DIR = os.path.join(MODELS_DIR, "league_snapshots")
-#CHECKPOINT_PATH = os.path.join(MODELS_DIR, "bytefight_ppo_600000_steps.zip")  # If you have a pretrained model
-CHECKPOINT_PATH = os.path.join(MODELS_DIR, "none")  # If you have a pretrained model
+CHECKPOINT_PATH = os.path.join(MODELS_DIR, "bytefight_ppo_600000_steps.zip")  # If you have a pretrained model
+#CHECKPOINT_PATH = os.path.join(MODELS_DIR, "bytefight_ppo_600000_steps")  # If you have a pretrained model
 
 LOG_LEVEL = 1
 
@@ -194,10 +195,11 @@ def main():
 
     while iteration * STEPS_PER_ITER < TOTAL_TIMESTEPS:
         print(f"Iteration {iteration+1}/{ITS}: training for {STEPS_PER_ITER} timesteps...")
+        rating_callback = RatingUpdateCallback(opponent_pool, main_agent_idx=iteration, verbose=1)
         model.learn(
             total_timesteps=STEPS_PER_ITER,
             progress_bar=True,
-            callback=[checkpoint_callback],
+            callback=[checkpoint_callback, rating_callback],
         )
 
         iteration += 1

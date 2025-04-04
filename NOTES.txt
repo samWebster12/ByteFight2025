@@ -39,3 +39,10 @@ RL:
  - Improve reward structure
  - Better training strategy
  - Better network architecture
+
+
+
+RL:
+ - Improve Self-play by adding an actual rating system that can be used to weight oppponents
+ - Additionally begin weighting the map we train on based on how much we lose on it 
+ - When saving models, also save rating

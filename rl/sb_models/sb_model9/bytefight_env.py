@@ -427,7 +427,7 @@ class ByteFightSnakeEnv(gym.Env):
         # Build obs
         obs = self._build_observation()
         self._last_obs = obs
-        info = {"bidding_successful": bidding_success}
+        info = {"bidding_successful": bidding_success, "opponent_index": self._opponent_index}
         return obs, info
 
     def step(self, action: int) -> Tuple[Dict[str, np.ndarray], float, bool, bool, Dict[str, Any]]:
@@ -643,6 +643,7 @@ class ByteFightSnakeEnv(gym.Env):
         pb_main = PlayerBoard(True, self.forecast_board)
         info = {
             "winner": self.winner,
+            "opponent_index": self._opponent_index,
             "turn_counter": self.board.turn_count,
             "move_counter": len(self.current_actions),
             "player_a_apples": pb_main.get_apples_eaten(enemy=False),

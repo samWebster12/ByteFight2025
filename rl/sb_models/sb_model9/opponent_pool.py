@@ -3,6 +3,7 @@ import random
 import copy
 import torch
 import numpy as np
+import json  # We'll use JSON to save ratings.
 from gymnasium import spaces
 from stable_baselines3.common.policies import ActorCriticPolicy
 
@@ -53,9 +54,23 @@ class OpponentPool:
         # 5) Load the main policy's state dictionary into the snapshot.
         snapshot_policy.load_state_dict(main_policy.state_dict())
 
-        # 6) (Optional: you can also save the state dict to disk here.)
+        # 6) Append snapshot and then save ratings to file.
         self.snapshots.append((snapshot_policy, rating, step))
         print(f"[OPPONENT POOL] Added snapshot at step {step} with rating {rating}")
+        self._save_ratings()  # Save all current ratings
+
+    def _save_ratings(self):
+        """
+        Save the current ratings of all snapshots to a JSON file.
+        """
+        ratings = []
+        for i, snapshot in enumerate(self.snapshots):
+            # snapshot is a tuple (policy, rating, step)
+            ratings.append({"index": i, "rating": snapshot[1], "step": snapshot[2]})
+        file_path = os.path.join(self.snapshot_dir, "ratings.json")
+        with open(file_path, "w") as f:
+            json.dump(ratings, f)
+        print(f"[OPPONENT POOL] Ratings saved to {file_path}")
 
     def sample_opponent(self, main_rating=None):
         """
@@ -67,11 +82,9 @@ class OpponentPool:
         if not self.snapshots:
             raise ValueError("Opponent pool is empty!")
         
-        # If a main_rating is provided, compute weights
         if main_rating is not None:
             tau = 50.0  # sensitivity parameter; adjust as needed
             ratings = np.array([snapshot[1] for snapshot in self.snapshots])
-            # Compute weight as exponential decay of absolute rating difference:
             weights = np.exp(-np.abs(ratings - main_rating) / tau)
             weights = weights / np.sum(weights)
             idx = int(np.random.choice(len(self.snapshots), p=weights))
@@ -79,7 +92,7 @@ class OpponentPool:
             idx = random.randint(0, len(self.snapshots) - 1)
 
         opp_policy, rating, step = self.snapshots[idx]
-        #print(f"[OPPONENT POOL] Sampling snapshot {idx}: step {step}, rating {rating}")
+        # print(f"[OPPONENT POOL] Sampling snapshot {idx}: step {step}, rating {rating}")
         return opp_policy, idx
 
     def update_rating(self, idxA, idxB, result, k_factor=32):
@@ -98,3 +111,4 @@ class OpponentPool:
         self.snapshots[idxA] = (snapA, newA, stepA)
         self.snapshots[idxB] = (snapB, newB, stepB)
         print(f"[OPPONENT POOL] Updated ratings: Snapshot {idxA} -> {newA}, Snapshot {idxB} -> {newB}")
+       # self._save_ratings()

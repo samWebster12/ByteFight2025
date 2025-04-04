@@ -5,6 +5,7 @@ import json
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from stable_baselines3 import PPO
+from stable_baselines3.common.utils import set_random_seed
 
 # Import your custom components (updated for 10-action absolute space)
 from bytefight_env import ByteFightSnakeEnv
@@ -19,6 +20,8 @@ from game.game_map import Map
 from game.board import Board
 from game.player_board import PlayerBoard
 from game.enums import Result
+
+RANDOM_SEED = 41
 
 def get_map_string(map_name):
     """Load map string from maps.json file."""
@@ -46,7 +49,7 @@ def create_environment(map_names, render_mode="rgb_array"):
         opponent, 
         render_mode=render_mode,
         verbose=False,
-        use_opponent=True
+        use_opponent=True,
     )
     
     return env
@@ -70,9 +73,9 @@ def evaluate_model(model_path, map_name="empty", num_episodes=5, render=True, sa
         render: Whether to render the environment.
         save_video: Whether to save a video of the gameplay.
     """
+    set_random_seed(RANDOM_SEED)
     # Create environment
     env = create_environment(map_name, render_mode="rgb_array" if render or save_video else None)
-    
     # Load trained model with the updated policy components
     print(f"Loading model from {model_path}")
     try:
@@ -82,7 +85,8 @@ def evaluate_model(model_path, map_name="empty", num_episodes=5, render=True, sa
             custom_objects={
                 "policy_class": ByteFightMaskedPolicy,
                 "features_extractor_class": ByteFightFeaturesExtractor
-            }
+            },
+            seed=RANDOM_SEED
         )
         print("Model loaded successfully!")
     except Exception as e:
@@ -202,14 +206,14 @@ def save_gameplay_video(frames_list, filename, fps=10):
 
 if __name__ == "__main__":
     # Path to the trained model
-    model_path = "models/bytefight_ppo_600000_steps"
+    model_path = "models/it9"
     
     # Evaluation settings
     #map_names = ["empty"]
-    num_episodes = 100
+    num_episodes = 20
     render = False
     save_video = False
-    
+    print(f"Evalutating model: {model_path}.zip")
     evaluate_model(
         model_path=model_path,
         map_name=AVAILABLE_MAP_NAMES,
