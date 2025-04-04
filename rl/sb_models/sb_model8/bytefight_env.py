@@ -411,8 +411,8 @@ class ByteFightSnakeEnv(gym.Env):
         map_name = np.random.choice(self.map_names)
         game_map = Map(get_map_string(map_name))
         
-        if self.verbose:
-            print(f"[DEBUG] Evaluation map: {map_name} (dimensions: {game_map.dim_x} x {game_map.dim_y})")
+        #if self.verbose:
+        print(f"[DEBUG] Evaluation map: {map_name} (dimensions: {game_map.dim_x} x {game_map.dim_y})")
 
         self.board = Board(game_map, time_to_play=110)
         if not self.board.is_as_turn():

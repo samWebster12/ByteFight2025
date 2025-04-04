@@ -15,6 +15,9 @@ from game.player_board import PlayerBoard
 from game.board import Board
 from opp_controller import OppController
 from game.game_map import Map
+from normalizer import RunningNormalizer
+from opponent_pool import OpponentPool
+from selfplay_controller import SelfPlayOppController
 
 
 # A lookup from discrete int => ByteFight Action
@@ -76,7 +79,8 @@ class ByteFightSnakeEnv(gym.Env):
     def __init__(
         self,
         map_names: List[Map],
-        opponent_controller: OppController,
+        opponent_pool: OpponentPool,
+        obs_normalizer: RunningNormalizer,
         render_mode: Optional[str] = None,
         use_opponent = True,
         verbose: bool = False
@@ -84,7 +88,8 @@ class ByteFightSnakeEnv(gym.Env):
         super().__init__()
         self.verbose = verbose
         self.map_names = map_names
-        self.opponent_controller = opponent_controller
+        self.opponent_pool = opponent_pool
+        self.obs_normalizer = obs_normalizer
         self.render_mode = render_mode
         self.use_opponent = use_opponent
         
@@ -125,11 +130,7 @@ class ByteFightSnakeEnv(gym.Env):
         self._turn_start_opponent_apples = 0
 
         # Observation Normalization
-        self.obs_normalizer_initialized = False
-        self.obs_mean = None  # Will be a np.array of shape (15,)
-        self.obs_var = None   # Same shape, variance accumulator
-        self.obs_count = 0
-        self.norm_clip_value = 5.0  # Clip normalized values to [-5, 5]
+        #self.obs_normalizer = RunningNormalizer(dim=15, clip_value=5.0)
 
         # Reward normalization variables
         self.reward_normalizer_initialized = False
@@ -365,28 +366,11 @@ class ByteFightSnakeEnv(gym.Env):
         ], dtype=np.float32)
 
         # ----- Online Normalization -----
-        # If not initialized, set running statistics to the first observation.
-        if not self.obs_normalizer_initialized:
-            self.obs_mean = scalars.copy()
-            self.obs_var = np.zeros_like(scalars, dtype=np.float32)
-            self.obs_count = 1
-            self.obs_normalizer_initialized = True
-        else:
-            # Update count
-            self.obs_count += 1
-            # Update running mean and variance (Welford’s algorithm)
-            delta = scalars - self.obs_mean
-            self.obs_mean += delta / self.obs_count
-            self.obs_var += delta * (scalars - self.obs_mean)
+        # Update stats with scalars
+        self.obs_normalizer.update(scalars)
 
-        # Compute standard deviation (using unbiased variance estimate)
-        obs_std = np.sqrt(self.obs_var / self.obs_count + 1e-8)
-
-        # Normalize and clip
-        norm_scalars = (scalars - self.obs_mean) / obs_std
-        norm_scalars = np.clip(norm_scalars, -self.norm_clip_value, self.norm_clip_value)
-
-
+        # Normalize (no second update needed)
+        norm_scalars = self.obs_normalizer.normalize(scalars, update_stats=False)
 
         # 3) Valid action mask
         action_mask = self._get_valid_action_mask()
@@ -417,6 +401,18 @@ class ByteFightSnakeEnv(gym.Env):
         self.board = Board(game_map, time_to_play=110)
         if not self.board.is_as_turn():
             self.board.next_turn()
+        
+
+        # 1) Sample a snapshot from the pool
+        opp_policy, opp_index = self.opponent_pool.sample_opponent()
+
+        # 2) Create a new SelfPlayOppController with that snapshot 
+        self.opponent_controller = SelfPlayOppController(
+            policy=opp_policy, 
+            obs_normalizer=self.obs_normalizer
+        )
+
+        self._opponent_index = opp_index  # store so we know which snapshot we used
 
         self.current_actions = []
         self.done = False
@@ -505,8 +501,10 @@ class ByteFightSnakeEnv(gym.Env):
             if self.use_opponent:
                 try:
                     pb_b = PlayerBoard(False, self.board)
+                    #print("WITHIN ENV: Player B head: ", pb_b.get_head_location())
                     opp_move = self.opponent_controller.play(pb_b, pb_b.get_time_left(enemy=False))
                     if opp_move is None or (hasattr(opp_move, 'value') and opp_move.value == Action.FF.value):
+                        #print("Opponnent Forfeited")
                         # Opponent forfeits => we win
                         if self.verbose:
                             print("[DEBUG] Opponent forfeits => We win.")
@@ -519,18 +517,25 @@ class ByteFightSnakeEnv(gym.Env):
                             opp_move = [opp_move]
                         if self.board.is_as_turn():
                             self.board.next_turn()
+                        #print("Is a's turn (before): ", self.board.is_as_turn())
+                        
+                        #print("opp move: ", opp_move)
                         success = self.board.apply_turn(opp_move, a_to_play=False)
                         if not success:
+                            #print("Is a's turn (after): ", self.board.is_as_turn())
+                            #print("Oppponent made invalid move (forecasted)")
                             if self.verbose:
                                 print(f"[DEBUG] Opponent made invalid move: {opp_move}")
                             reward += win_reward
                             self.done = True
                             self.winner = Result.PLAYER_A
                         else:
+                            #print("opp move sucessful")
                             if self.verbose:
                                 print(f"[DEBUG] Opponent successfully made move: {opp_move}")
 
                 except Exception as e:
+                    print("opponent crasehd")
                     if self.verbose:
                         print(f"[DEBUG] Opponent crashed: {e}")
                     reward += win_reward
@@ -661,11 +666,11 @@ class ByteFightSnakeEnv(gym.Env):
             self.reward_var += delta * (reward - self.reward_mean)
 
         # Calculate standard deviation
-        reward_std = np.sqrt(self.reward_var / self.reward_count + 1e-8)
+        #reward_std = np.sqrt(self.reward_var / self.reward_count + 1e-8)
         # Normalize the reward
-        norm_reward = (reward - self.reward_mean) / reward_std
+        #norm_reward = (reward - self.reward_mean) / reward_std
         # Clip the normalized reward to [-reward_clip_value, reward_clip_value]
-        norm_reward = np.clip(norm_reward, -self.reward_clip_value, self.reward_clip_value)
+        #norm_reward = np.clip(norm_reward, -self.reward_clip_value, self.reward_clip_value)
         # ----------------------------------------
 
         return obs, reward, self.done, truncated, info
