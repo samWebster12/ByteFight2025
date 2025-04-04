@@ -1,0 +1,59 @@
+{
+    "os": "Windows-10-10.0.26100-SP0",
+    "python": "CPython 3.11.9",
+    "heartbeatAt": "2025-04-04T01:32:02.753500",
+    "startedAt": "2025-04-04T01:31:59.713145",
+    "docker": null,
+    "args": [
+        "service",
+        "--debug",
+        "--port-filename",
+        "C:\\Users\\samue\\AppData\\Local\\Temp\\tmpd35x2qxz\\port-11408.txt",
+        "--pid",
+        "11408"
+    ],
+    "state": "running",
+    "program": "C:\\Users\\samue\\OneDrive\\School\\Georgia-Tech\\ByteFight\\Game\\rl\\sb_models\\sb_model9\\wandb_sweep.py",
+    "codePathLocal": "wandb_sweep.py",
+    "codePath": "rl\\sb_models\\sb_model9\\wandb_sweep.py",
+    "git": {
+        "remote": "https://github.com/samWebster12/ByteFight2025.git",
+        "commit": "ac8a979d4d98a105149c9a330bc99f8d7f366edc"
+    },
+    "email": "samuelalexwebster@gmail.com",
+    "root": "C:/Users/samue/OneDrive/School/Georgia-Tech/ByteFight/Game",
+    "host": "Sam-Laptop",
+    "username": null,
+    "executable": "C:\\Users\\samue\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "cpu_count": 14,
+    "cpu_count_logical": 20,
+    "cpu_freq": {
+        "current": 2600.0,
+        "min": 0.0,
+        "max": 2600.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2600.0,
+            "min": 0.0,
+            "max": 2600.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 2022212366336,
+            "used": 1139813974016
+        }
+    },
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+            "memory_total": 8585740288
+        }
+    ],
+    "memory": {
+        "total": 68374552576
+    }
+}

@@ -1,0 +1,931 @@
+diff --git a/rl/sb_models/sb_model9/logs/PPO_69/events.out.tfevents.1743729197.Sam-Laptop.16480.1 b/rl/sb_models/sb_model9/logs/PPO_69/events.out.tfevents.1743729197.Sam-Laptop.16480.1
+index e911d92..dc9cdce 100644
+Binary files a/rl/sb_models/sb_model9/logs/PPO_69/events.out.tfevents.1743729197.Sam-Laptop.16480.1 and b/rl/sb_models/sb_model9/logs/PPO_69/events.out.tfevents.1743729197.Sam-Laptop.16480.1 differ
+diff --git a/rl/sb_models/sb_model9/logs/env_0.monitor.csv b/rl/sb_models/sb_model9/logs/env_0.monitor.csv
+index 14d7120..9be3672 100644
+--- a/rl/sb_models/sb_model9/logs/env_0.monitor.csv
++++ b/rl/sb_models/sb_model9/logs/env_0.monitor.csv
+@@ -96,3 +96,78 @@ r,l,t
+ -2.72,140,1017.733874
+ 2.99,75,1020.562941
+ -2.62,35,1021.915975
++-1.4,518,1166.628384
++2.96,12,1167.621457
++3.28,94,1175.461397
++3.62,269,1200.505627
++3.16,40,1203.785805
++3.04,56,1208.528094
++3.02,81,1220.115975
++-2.15,256,1242.013978
++3.12,24,1243.644753
++2.96,11,1244.336129
++-2.78,139,1253.391785
++3.01,60,1257.291159
++2.94,7,1257.797277
++2.96,11,1258.588445
++-2.48,168,1267.229145
++3.83,192,1274.644379
++2.94,7,1274.945026
++0.02,511,1294.295799
++-3.09,50,1401.190807
++-3.14,21,1404.195006
++3.21,31,1407.730988
++4.2,184,1424.27037
++3.04,8,1425.144549
++-3.18,32,1427.597713
++3.02,23,1429.242437
++3.18,36,1432.874113
++3.31,147,1443.86454
++3.01,30,1448.118638
++3.9,281,1471.03179
++2.9,77,1478.679072
++3.0,85,1484.990777
++3.04,8,1485.531918
++2.99,55,1489.613717
++2.85,8,1490.209406
++3.04,8,1490.848068
++-3.11,27,1494.124963
++3.02,4,1494.453101
++3.1,186,1508.889605
++-2.98,53,1510.7763
++-3.02,15,1511.363414
++-2.92,85,1514.719642
++3.2,78,1517.726331
++-1.5,264,1528.43364
++3.41,185,1535.651421
++-2.85,11,1536.097107
++3.86,131,1704.88462
++3.18,161,1719.606127
++-2.96,8,1720.28524
++-3.02,73,1728.946821
++-2.88,82,1738.274173
++3.03,6,1738.915874
++3.06,31,1742.307745
++2.96,11,1743.577001
++3.13,66,1752.090484
++-2.48,151,1776.671992
++3.24,162,1796.760435
++-2.57,141,1810.173833
++3.42,159,1816.416094
++-3.03,43,1818.199487
++2.99,26,1819.286319
++3.06,31,1820.535715
++2.95,9,1820.897378
++-3.09,12,1821.366274
++3.03,6,1821.644751
++-3.05,126,1826.469059
++3.34,58,1828.690699
++4.01,237,1838.610256
++3.28,135,1843.610448
++-2.97,6,1843.824301
++-2.83,23,1844.647391
++3.71,191,1971.697167
++3.27,111,1981.888695
++2.95,9,1982.635373
++2.89,35,1985.592559
++3.43,184,2001.130807
+diff --git a/rl/sb_models/sb_model9/logs/env_1.monitor.csv b/rl/sb_models/sb_model9/logs/env_1.monitor.csv
+index 7a0716f..9383a71 100644
+--- a/rl/sb_models/sb_model9/logs/env_1.monitor.csv
++++ b/rl/sb_models/sb_model9/logs/env_1.monitor.csv
+@@ -85,3 +85,51 @@ r,l,t
+ 3.29,85,1030.140452
+ -2.95,29,1031.499487
+ -3.11,8,1031.881548
++4.83,333,1174.541512
++-3.11,95,1184.429633
++-3.18,21,1186.091497
++3.44,115,1196.544834
++3.39,164,1212.756376
++-2.93,33,1218.036907
++3.14,28,1222.063541
++-2.98,4,1222.498633
++2.9,85,1230.887084
++3.37,63,1234.973321
++2.99,36,1237.314519
++3.28,26,1238.991027
++3.07,33,1241.189282
++3.26,69,1245.75482
++-1.88,278,1262.998469
++-2.06,355,1276.713895
++-2.71,96,1280.265942
++-2.84,59,1282.489543
++-3.04,41,1284.018325
++-2.54,118,1288.504733
++-1.66,225,1407.72478
++3.1,20,1409.692821
++4.68,456,1451.186627
++3.18,93,1458.327776
++-3.14,21,1459.862067
++5.13,552,1505.729958
++3.55,166,1511.916768
++3.12,101,1515.850688
++-2.55,139,1521.42968
++3.06,39,1522.890996
++4.56,393,1701.701176
++5.11,742,1792.907244
++-3.13,12,1793.850284
++3.17,23,1795.777497
++3.06,12,1796.942352
++-2.23,258,1813.597403
++3.16,177,1820.742082
++2.82,42,1822.407591
++2.98,15,1822.958609
++-1.81,195,1830.706007
++-2.44,240,1840.306811
++3.38,159,1846.302938
++3.04,8,1951.681392
++-1.31,352,1984.742728
++2.91,20,1986.615676
++2.93,5,1987.095312
++3.08,36,1989.830974
++3.29,86,1996.564474
+diff --git a/rl/sb_models/sb_model9/logs/env_2.monitor.csv b/rl/sb_models/sb_model9/logs/env_2.monitor.csv
+index 7d8a079..15e9902 100644
+--- a/rl/sb_models/sb_model9/logs/env_2.monitor.csv
++++ b/rl/sb_models/sb_model9/logs/env_2.monitor.csv
+@@ -111,3 +111,63 @@ r,l,t
+ 2.98,15,1016.950163
+ 2.98,15,1017.573956
+ -2.25,253,1027.059087
++4.31,363,1170.567832
++3.87,295,1197.666845
++3.08,5,1198.05029
++3.49,136,1213.202229
++3.02,4,1213.785087
++3.25,67,1222.557666
++2.94,7,1223.464312
++3.36,189,1237.221031
++2.99,17,1238.344007
++3.79,272,1256.15521
++3.27,62,1259.940336
++3.02,4,1260.107835
++-2.51,95,1263.718574
++2.93,13,1264.204785
++2.79,15,1264.78827
++3.55,108,1269.005547
++-2.71,125,1273.824469
++4.18,424,1289.857268
++3.64,164,1408.60251
++3.47,138,1421.327446
++3.03,6,1421.834843
++3.06,99,1429.97896
++3.62,187,1448.114717
++3.58,159,1460.188211
++-2.93,63,1464.732592
++3.33,132,1476.996001
++4.25,351,1504.384932
++-3.05,20,1505.093011
++4.57,330,1518.006814
++3.85,256,1528.224194
++-3.03,43,1529.841821
++-2.8,107,1534.377264
++2.84,6,1534.634484
++3.13,84,1702.649945
++3.52,230,1725.663545
++-2.34,156,1742.587981
++2.77,11,1744.330566
++3.63,218,1780.02477
++-2.49,216,1802.038174
++3.03,60,1806.52073
++3.03,33,1807.797634
++2.89,24,1808.737566
++2.96,11,1809.20259
++3.02,100,1813.241284
++3.06,12,1813.726187
++-3.23,31,1815.000485
++2.94,7,1815.3064
++2.9,77,1818.310013
++-2.1,253,1828.256122
++-3.12,94,1832.399461
++-3.04,41,1834.039537
++-2.98,4,1834.197251
++-2.63,152,1839.813813
++2.95,47,1841.502365
++-3.25,18,1842.208042
++2.87,71,1845.000467
++3.35,244,1972.533881
++-2.81,123,1983.190552
++-3.01,9,1984.002948
++3.38,169,1998.048687
+diff --git a/rl/sb_models/sb_model9/logs/env_3.monitor.csv b/rl/sb_models/sb_model9/logs/env_3.monitor.csv
+index ea7847b..bbf69f3 100644
+--- a/rl/sb_models/sb_model9/logs/env_3.monitor.csv
++++ b/rl/sb_models/sb_model9/logs/env_3.monitor.csv
+@@ -86,3 +86,58 @@ r,l,t
+ -2.81,106,1020.816439
+ -2.59,117,1025.293535
+ 3.19,166,1035.656879
++-3.11,46,1157.053867
++3.39,212,1174.550385
++-2.98,4,1175.124029
++-2.69,138,1188.346278
++3.0,57,1193.245859
++3.34,74,1199.32579
++-2.74,149,1218.72266
++3.04,8,1219.668644
++2.83,23,1222.743806
++2.97,59,1227.16279
++4.16,376,1251.761661
++-3.06,7,1252.236619
++3.14,17,1253.41782
++3.06,50,1256.595322
++-2.75,147,1262.517979
++-2.07,251,1272.268921
++3.29,93,1275.719833
++3.76,255,1285.374544
++-1.7,311,1413.165887
++-2.99,13,1414.494593
++-2.15,284,1438.561157
++2.87,31,1444.432625
++3.98,359,1473.819599
++3.86,265,1495.014852
++3.17,62,1500.955614
++3.1,85,1504.02264
++2.99,17,1504.694342
++3.07,14,1505.249423
++4.39,480,1524.407801
++-2.61,224,1533.37874
++-3.18,32,1697.678949
++3.15,57,1703.81942
++-1.54,273,1731.606251
++2.93,24,1734.096788
++-3.07,16,1735.899724
++3.01,108,1750.693313
++2.94,7,1751.522883
++3.04,8,1752.829013
++3.2,68,1765.014088
++3.31,274,1797.506162
++2.98,15,1798.936896
++-2.65,118,1806.239331
++3.9,254,1816.466913
++3.11,59,1818.758795
++-1.16,568,1841.047856
++2.94,7,1841.362871
++-2.99,51,1951.461797
++-3.16,36,1954.594398
++-2.79,120,1966.733257
++2.94,54,1972.052079
++3.22,159,1985.292594
++3.91,255,2006.72913
++2.99,25,2009.347684
++2.72,41,2014.704182
++2.94,7,2015.700448
+diff --git a/rl/sb_models/sb_model9/logs/env_4.monitor.csv b/rl/sb_models/sb_model9/logs/env_4.monitor.csv
+index 5e3990d..8ac7ba6 100644
+--- a/rl/sb_models/sb_model9/logs/env_4.monitor.csv
++++ b/rl/sb_models/sb_model9/logs/env_4.monitor.csv
+@@ -72,3 +72,59 @@ r,l,t
+ -2.86,9,1013.136066
+ 3.84,169,1019.449666
+ -2.92,73,1022.204131
++4.83,507,1178.803872
++-1.61,161,1193.207974
++3.04,8,1193.880225
++2.82,21,1195.601649
++-2.86,66,1201.611387
++3.04,8,1202.513325
++-2.82,74,1214.253191
++4.43,357,1240.998426
++-2.78,112,1248.306912
++-3.1,10,1248.978283
++-2.65,40,1251.631251
++4.36,374,1267.467242
++-2.66,160,1273.482393
++2.96,11,1273.946388
++2.93,24,1274.838088
++-3.0,11,1275.230967
++-3.04,11,1275.634807
++-2.73,179,1282.399459
++2.9,37,1283.830847
++3.67,162,1400.281099
++2.97,13,1401.377339
++3.06,12,1402.545282
++3.63,309,1429.817048
++3.04,8,1430.373269
++3.02,4,1430.70593
++-2.05,342,1459.882303
++3.43,240,1479.313322
++3.69,183,1496.012269
++2.97,13,1497.507094
++3.16,149,1503.468025
++2.96,30,1504.567918
++4.55,410,1521.111526
++3.65,285,1695.689827
++3.02,13,1696.977357
++3.09,122,1708.117475
++3.06,12,1709.115005
++2.87,31,1711.962172
++4.78,385,1763.442544
++3.56,197,1788.357017
++-2.9,66,1794.581999
++5.35,643,1824.05028
++-1.87,329,1836.880373
++3.06,89,1840.371165
++2.94,7,1840.67048
++-2.71,115,1844.940019
++-3.01,9,1944.985735
++2.9,18,1947.046792
++-2.58,116,1956.6035
++2.88,33,1960.39302
++-3.01,75,1968.650937
++-2.84,110,1978.089379
++-2.98,4,1978.497801
++-3.02,65,1983.760606
++3.33,131,1994.901324
++2.81,20,1996.667022
++-2.57,111,2005.958947
+diff --git a/rl/sb_models/sb_model9/logs/env_5.monitor.csv b/rl/sb_models/sb_model9/logs/env_5.monitor.csv
+index 94c445a..8f3af2f 100644
+--- a/rl/sb_models/sb_model9/logs/env_5.monitor.csv
++++ b/rl/sb_models/sb_model9/logs/env_5.monitor.csv
+@@ -91,3 +91,47 @@ r,l,t
+ 3.03,6,1022.023071
+ -2.9,78,1025.138084
+ -3.29,11,1026.206347
++3.65,162,1157.617446
++-2.99,21,1159.462981
++-3.26,17,1160.771311
++3.08,102,1169.72438
++-2.98,4,1170.300015
++3.13,111,1181.364039
++-2.19,313,1214.50436
++-2.01,279,1235.142634
++3.82,188,1247.435355
++-2.2,307,1261.306859
++-3.01,17,1261.982969
++5.08,388,1276.766237
++-2.21,214,1390.048831
++-2.11,212,1409.72942
++-2.06,323,1440.711227
++5.36,548,1484.309738
++-3.18,58,1489.309314
++3.81,257,1503.154699
++4.05,282,1514.246385
++-3.02,34,1515.747651
++3.19,8,1516.124632
++2.95,37,1517.6115
++2.96,11,1518.081308
++3.03,25,1519.077239
++-2.08,258,1691.942101
++2.96,11,1692.890372
++-3.05,39,1696.580082
++3.44,241,1721.538494
++-2.27,193,1745.101134
++4.65,450,1799.672429
++3.21,12,1800.151458
++-3.11,47,1801.980117
++3.43,144,1807.849625
++-2.86,25,1808.860747
++-2.94,78,1811.900346
++2.63,21,1812.7426
++3.3,157,1818.834007
++3.48,143,1824.982067
++2.91,21,1825.801153
++-2.8,48,1827.675797
++3.34,174,1834.069409
++3.12,111,1951.636644
++4.58,530,1998.948322
++-2.98,31,2001.570064
+diff --git a/rl/sb_models/sb_model9/logs/env_6.monitor.csv b/rl/sb_models/sb_model9/logs/env_6.monitor.csv
+index 8fbf8db..38ddc1d 100644
+--- a/rl/sb_models/sb_model9/logs/env_6.monitor.csv
++++ b/rl/sb_models/sb_model9/logs/env_6.monitor.csv
+@@ -51,3 +51,55 @@ r,l,t
+ -2.47,220,1014.243395
+ 3.35,79,1017.25045
+ 3.24,193,1029.623988
++-3.2,29,1149.32638
++3.68,210,1166.331681
++-3.09,12,1167.908144
++-3.16,17,1170.345723
++3.07,33,1172.952636
++2.98,15,1174.187368
++-2.13,239,1195.417304
++-2.36,76,1206.45812
++-2.77,140,1220.735383
++-2.92,65,1224.821635
++-3.14,10,1225.515126
++-3.01,86,1231.193983
++-2.6,144,1240.557097
++-3.19,32,1242.582375
++3.08,44,1245.622633
++-2.22,271,1257.758035
++-3.01,115,1262.224187
++-1.91,263,1272.117579
++2.95,67,1274.715609
++-3.16,18,1275.375969
++-1.83,385,1406.481242
++3.02,4,1406.870306
++2.94,105,1417.172661
++3.24,34,1419.924781
++-2.61,105,1427.90497
++2.88,190,1446.087224
++3.13,26,1448.022782
++4.14,309,1472.892103
++2.82,21,1474.260492
++4.06,437,1501.988114
++3.87,258,1512.172405
++3.54,135,1517.71631
++3.31,90,1521.222256
++2.95,9,1521.583372
++-2.76,133,1689.938396
++-2.61,125,1701.731855
++-2.91,57,1706.540661
++-2.21,259,1736.751778
++-2.75,119,1756.67339
++3.11,58,1765.044354
++-3.15,38,1771.979737
++-3.17,15,1775.07204
++3.61,197,1793.116203
++2.58,33,1796.115391
++-2.74,22,1796.919109
++-0.81,538,1818.215515
++3.02,4,1818.42288
++3.8,211,1827.065826
++-3.08,23,1941.282137
++3.5,194,1960.314384
++2.98,23,1962.447833
++-1.53,317,1989.423437
+diff --git a/rl/sb_models/sb_model9/logs/env_7.monitor.csv b/rl/sb_models/sb_model9/logs/env_7.monitor.csv
+index f1e1922..dcc4724 100644
+--- a/rl/sb_models/sb_model9/logs/env_7.monitor.csv
++++ b/rl/sb_models/sb_model9/logs/env_7.monitor.csv
+@@ -78,3 +78,74 @@ r,l,t
+ -2.3,217,1006.422171
+ -2.27,261,1016.427591
+ 3.36,88,1020.084937
++3.45,148,1150.509986
++3.19,8,1151.08809
++3.08,16,1152.383376
++-2.86,9,1153.170389
++-3.15,47,1157.268821
++3.37,169,1172.96874
++-2.29,269,1198.589511
++-2.76,133,1215.691915
++3.25,107,1222.509309
++-3.09,21,1223.915867
++-3.08,42,1226.614108
++4.08,465,1253.131129
++2.95,9,1253.498184
++2.94,7,1253.788798
++3.31,109,1257.978667
++4.17,197,1265.471475
++3.64,145,1270.927711
++2.95,10,1271.377559
++2.94,26,1272.347679
++-2.94,23,1273.16407
++-3.01,9,1273.49799
++-3.1,10,1273.867808
++-3.14,41,1275.436513
++3.96,304,1402.507481
++3.86,249,1424.552828
++-3.06,106,1436.23397
++2.94,7,1436.689497
++-3.15,18,1437.895679
++3.04,8,1438.586518
++3.06,69,1443.916365
++2.95,68,1449.200128
++-2.3,156,1462.399895
++2.96,11,1463.54387
++3.03,6,1464.283826
++3.0,27,1465.919255
++-3.06,7,1466.303931
++3.07,14,1467.42928
++3.5,94,1474.13907
++2.94,7,1474.934891
++-2.58,199,1491.97071
++2.94,26,1492.908714
++3.17,23,1493.724226
++5.84,590,1517.043563
++3.49,68,1519.767952
++-3.04,61,1522.400215
++2.97,13,1522.937809
++2.84,6,1523.157598
++-3.03,24,1686.454883
++-1.51,329,1719.704536
++2.99,45,1724.496389
++3.07,14,1726.099602
++3.03,6,1726.851008
++2.99,17,1728.543745
++-3.09,20,1730.48751
++-1.96,348,1780.573671
++-1.95,351,1802.253864
++3.48,190,1809.71676
++3.16,59,1811.980298
++3.3,141,1817.697386
++3.03,6,1817.961488
++3.2,301,1829.637514
++3.04,8,1829.979113
++-3.07,33,1831.233806
++3.12,91,1945.104357
++3.07,14,1946.163249
++-2.92,152,1961.804178
++-3.0,30,1964.240918
++3.97,302,1989.842306
++-3.03,13,1990.913921
++2.92,41,1994.108398
++3.02,43,1997.86415
+diff --git a/rl/sb_models/sb_model9/wandb_sweep.py b/rl/sb_models/sb_model9/wandb_sweep.py
+index a7547a5..5bde558 100644
+--- a/rl/sb_models/sb_model9/wandb_sweep.py
++++ b/rl/sb_models/sb_model9/wandb_sweep.py
+@@ -2,193 +2,255 @@ import os
+ import time
+ import numpy as np
+ import torch
+-import argparse
+ import json
+ from stable_baselines3 import PPO
+-from stable_baselines3.common.callbacks import CheckpointCallback, EvalCallback
+-from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
++from stable_baselines3.common.callbacks import CheckpointCallback
++from stable_baselines3.common.vec_env import SubprocVecEnv, DummyVecEnv
+ from stable_baselines3.common.utils import set_random_seed
+ from stable_baselines3.common.monitor import Monitor
+-from stable_baselines3.common.atari_wrappers import ClipRewardEnv
+ import gymnasium as gym
+ 
+-# Import your custom components
++import wandb
++from wandb.integration.sb3 import WandbCallback
++
++# ------------------------------------------------------------------------------
++# Custom imports (modify these paths/names to match your actual files)
+ from bytefight_env import ByteFightSnakeEnv
+ from custom_policy3 import ByteFightMaskedPolicy, ByteFightFeaturesExtractor
++from normalizer import RunningNormalizer
++from opponent_pool import OpponentPool
+ from opp_controller import OppController
++# ------------------------------------------------------------------------------
+ 
+-# Import wandb and its SB3 callback
+-import wandb
+-from wandb.integration.sb3 import WandbCallback
+-
+-# Setup training parameters defaults (these will be overridden by wandb.config)
++# Training parameters
+ RANDOM_SEED = 42
+-NUM_ENV = 8         # Number of environments for parallel training
+-TOTAL_TIMESTEPS = 300_000
+-SAVE_FREQ = 50_000  # Save model every 50k steps
+-EVAL_FREQ = 20_000  # Evaluate model every 20k steps
++NUM_ENV = 8 #8
++TOTAL_TIMESTEPS = 1_600_000
++ITS = 25
++STEPS_PER_ITER = int(TOTAL_TIMESTEPS / ITS)
++SAVE_FREQ = 50_000
+ LOGS_DIR = "./logs"
+ MODELS_DIR = "./models"
+-LOG_LEVEL = 1       # 0: No output, 1: Info, 2: Debug
++SNAPSHOT_DIR = os.path.join(MODELS_DIR, "league_snapshots")
++CHECKPOINT_PATH = os.path.join(MODELS_DIR, "bytefight_ppo_600000_steps.zip")  # If you have a pretrained model
++LOG_LEVEL = 1
+ 
+-# Create required directories
++# Create directories
+ os.makedirs(LOGS_DIR, exist_ok=True)
+ os.makedirs(MODELS_DIR, exist_ok=True)
+-os.makedirs(f"{LOGS_DIR}/eval", exist_ok=True)
+-
+-import os, sys
+-parent_dir = os.path.abspath(os.path.join(__file__, "../../../.."))
+-sys.path.insert(0, parent_dir)
+-
+-from game.game_map import Map
+-
+-# List of all available maps
+-AVAILABLE_MAP_NAMES = [
+-    "pillars", "great_divide", "cage", "empty", "empty_large", "ssspline",
+-    "combustible_lemons", "arena", "ladder", "compasss", "recurve",
+-    "diamonds", "ssspiral", "lol", "attrition"
+-]
+-
+-def get_map_string(map_name):
+-    if not os.path.exists("maps.json"):
+-        raise FileNotFoundError("maps.json file not found. Please make sure it exists in the current directory.")
+-    with open("maps.json", "r") as f:
+-        maps = json.load(f)
+-    if map_name not in maps:
+-        available_maps = ", ".join(maps.keys())
+-        raise KeyError(f"Map '{map_name}' not found in maps.json. Available maps: {available_maps}")
+-    return maps[map_name]
+-
+-def make_bytefight_env(rank, seed=0):
++os.makedirs(SNAPSHOT_DIR, exist_ok=True)
++os.makedirs(os.path.join(LOGS_DIR, "eval"), exist_ok=True)
++
++############################################
++# Dummy environment for initialization
++############################################
++class ByteFightDummyEnv(gym.Env):
+     """
+-    Create a ByteFight environment.
+-    Randomly select a map from AVAILABLE_MAP_NAMES for each environment instance.
++    A trivial environment used ONLY to let SB3 create or load PPO
++    with the correct observation/action shapes for ByteFight. 
++    We will run 8 copies of this dummy env in parallel 
++    so the model sees n_envs=8 from the start.
++    """
++    def __init__(self, seed=42):
++        super().__init__()
++        # 10 discrete actions, as in ByteFight
++        self.action_space = gym.spaces.Discrete(10)
++        # The same Dict observation space you have in your real env
++        self.observation_space = gym.spaces.Dict({
++            "board_image": gym.spaces.Box(low=0, high=1, shape=(9, 64, 64), dtype=np.float32),
++            "features": gym.spaces.Box(low=-1e6, high=1e6, shape=(15,), dtype=np.float32),
++            "action_mask": gym.spaces.Box(low=0, high=1, shape=(10,), dtype=np.uint8)
++        })
++        self.seed_value = seed
++
++    def reset(self, *, seed=None, options=None):
++        obs = {
++            "board_image": np.zeros((9, 64, 64), dtype=np.float32),
++            "features": np.zeros(15, dtype=np.float32),
++            "action_mask": np.ones(10, dtype=np.uint8),
++        }
++        return obs, {}
++
++    def step(self, action):
++        # Return dummy obs, no real transitions
++        obs = {
++            "board_image": np.zeros((9, 64, 64), dtype=np.float32),
++            "features": np.zeros(15, dtype=np.float32),
++            "action_mask": np.ones(10, dtype=np.uint8),
++        }
++        reward = 0.0
++        done = True  # immediately end
++        info = {}
++        return obs, reward, done, False, info
++
++############################################
++# Real self-play environment factories
++############################################
++def make_selfplay_env(rank, seed, opponent_pool, obs_normalizer):
++    """
++    Creates a ByteFightSnakeEnv that references your OpponentPool and RunningNormalizer.
++    On reset, it samples an opponent from the pool.
++    We set use_opponent=True to do self-play.
+     """
+     def _init():
+-        # Create opponent controller
+-        dummy_data = 1
+-        opponent = OppController(dummy_data)
+-        # Create the environment (use_opponent flag can be set as desired)
+-        env = ByteFightSnakeEnv(AVAILABLE_MAP_NAMES, opponent, render_mode=None, use_opponent=False)
+-        # Wrap environment with Monitor for statistics
+-        env = Monitor(env, f"{LOGS_DIR}/env_{rank}")
+-        # Set environment seed
++        env = ByteFightSnakeEnv(
++            map_names=["empty", "empty_large", "ssspline"],  # example
++            opponent_pool=opponent_pool,
++            obs_normalizer=obs_normalizer,
++            render_mode=None,
++            use_opponent=True,
++            verbose=False
++        )
++        env = Monitor(env, os.path.join(LOGS_DIR, f"env_{rank}"))
+         env.reset(seed=seed + rank)
+         return env
+     set_random_seed(seed)
+     return _init
+ 
+-if __name__ == "__main__":
+-    # Initialize wandb run (this will be overwritten by sweep values)
+-    wandb.init(project="bytefight-sweep", config={
+-        "learning_rate": 3e-4,
+-        "n_steps": 2048,
+-        "batch_size": 64,
+-        "n_epochs": 10,
+-        "gamma": 0.99,
+-        "gae_lambda": 0.95,
+-        "clip_range": 0.2,
+-        "ent_coef": 0.01,
+-        "vf_coef": 0.5,
+-        "max_grad_norm": 0.5,
+-        
+-    })
+-    config = wandb.config
+-
+-    print(f"Creating {NUM_ENV} environments with random maps from AVAILABLE_MAP_NAMES...")
+-    vec_env = SubprocVecEnv([make_bytefight_env(i, RANDOM_SEED) for i in range(NUM_ENV)])
+-    vec_env = VecNormalize(vec_env, norm_obs=True, norm_reward=True, clip_obs=10, clip_reward=3)
+-
+-    # Create evaluation environment similarly
+-    eval_opponent = OppController(1)
+-    eval_env = ByteFightSnakeEnv(
+-        map_names=AVAILABLE_MAP_NAMES,
+-        opponent_controller=eval_opponent,
+-        render_mode=None,
+-        verbose=False,
+-        use_opponent=False
+-    )
+-    eval_env = Monitor(eval_env, f"{LOGS_DIR}/eval_env")
++############################################
++# Main training script
++############################################
++def main():
++    # 1. Create directories
++    os.makedirs(LOGS_DIR, exist_ok=True)
++    os.makedirs(MODELS_DIR, exist_ok=True)
++    os.makedirs(SNAPSHOT_DIR, exist_ok=True)
++    os.makedirs(os.path.join(LOGS_DIR, "eval"), exist_ok=True)
+ 
+-    checkpoint_callback = CheckpointCallback(
+-        save_freq=SAVE_FREQ // NUM_ENV,
+-        save_path=MODELS_DIR,
+-        name_prefix="bytefight_ppo_wandb",
+-        save_replay_buffer=True,
+-        save_vecnormalize=True,
++    # 2. Initialize wandb
++    wandb.init(
++        project="bytefight_project",  # Set your wandb project name
++        config={
++            "total_timesteps": TOTAL_TIMESTEPS,
++            "learning_rate": 3e-4,
++            "batch_size": 64,
++            "n_steps": 2048,
++            "gamma": 0.99,
++            "gae_lambda": 0.95,
++            # add any other hyperparameters you want to track
++        },
++        sync_tensorboard=True,   # Sync TensorBoard logs with wandb
++        monitor_gym=True,          # Automatically log gym metrics
++        save_code=True,            # Optionally save a snapshot of your code
+     )
+ 
+-    eval_callback = EvalCallback(
+-        eval_env,
+-        best_model_save_path=f"{MODELS_DIR}/best_wandb",
+-        log_path=f"{LOGS_DIR}/eval",
+-        eval_freq=EVAL_FREQ // NUM_ENV,
+-        deterministic=True,
+-        render=False,
+-        n_eval_episodes=10
++    # Optional: create wandb callback
++    wandb_callback = WandbCallback(
++        model_save_path=MODELS_DIR,  # Path where models are saved
++        verbose=2,
+     )
+ 
++    # 1) Create shared normalizer and an empty OpponentPool
++    obs_normalizer = RunningNormalizer(dim=15, clip_value=5.0)
++    opponent_pool = OpponentPool(snapshot_dir=SNAPSHOT_DIR, initial_policy=None, initial_rating=1000)
++
++    # 2) Create 8 parallel copies of the DummyEnv for model init/loading
++    def dummy_env_fn(rank):
++        def _init():
++            return ByteFightDummyEnv(seed=RANDOM_SEED + rank)
++        return _init
++
++    dummy_subproc_env = SubprocVecEnv([dummy_env_fn(i) for i in range(NUM_ENV)])
++    # => Now dummy_subproc_env.num_envs == 8
++
++    # 3) Create or load the main PPO model with that 8-env dummy
++    print("Creating/Loading PPO agent with dummy 8-env to ensure n_envs=8...")
+     policy_kwargs = {
+         "net_arch": dict(pi=[256, 128], vf=[256, 128]),
+         "activation_fn": torch.nn.ReLU,
+         "features_extractor_class": ByteFightFeaturesExtractor,
+-        "features_extractor_kwargs": {
+-            "features_dim": 256
+-        }
++        "features_extractor_kwargs": {"features_dim": 256},
+     }
+ 
+-    print("Creating PPO agent...")
+-    model = PPO(
+-        policy=ByteFightMaskedPolicy,
+-        env=vec_env,
+-        learning_rate=config.learning_rate,
+-        n_steps=config.n_steps,
+-        batch_size=config.batch_size,
+-        n_epochs=config.n_epochs,
+-        gamma=config.gamma,
+-        gae_lambda=config.gae_lambda,
+-        clip_range=config.clip_range,
+-        normalize_advantage=True,
+-        ent_coef=config.ent_coef,
+-        vf_coef=config.vf_coef,
+-        max_grad_norm=config.max_grad_norm,
+-        use_sde=False,
+-        sde_sample_freq=-1,
+-        target_kl=None,
+-        tensorboard_log=LOGS_DIR,
+-        policy_kwargs=policy_kwargs,
+-        verbose=LOG_LEVEL,
+-        seed=RANDOM_SEED,
+-        device="auto"
+-    )
+-
+-    print(f"Starting training for {TOTAL_TIMESTEPS} timesteps...")
+-    start_time = time.time()
+-
+-    checkpoint_path = f"{MODELS_DIR}/checkpoint.zip"
+-    if os.path.exists(checkpoint_path):
+-        print(f"Loading model from checkpoint: {checkpoint_path}")
++    if os.path.exists(CHECKPOINT_PATH):
++        print(f"Loading model from {CHECKPOINT_PATH}...")
+         model = PPO.load(
+-            checkpoint_path,
+-            env=vec_env,
++            CHECKPOINT_PATH,
++            env=dummy_subproc_env,
+             custom_objects={
+                 "policy_class": ByteFightMaskedPolicy,
+                 "features_extractor_class": ByteFightFeaturesExtractor
+             }
+         )
+-        print("Checkpoint loaded successfully!")
++        print("Pretrained model loaded successfully!")
++    else:
++        print("No pretrained model found; creating new model from scratch.")
++        model = PPO(
++            policy=ByteFightMaskedPolicy,
++            env=dummy_subproc_env,
++            learning_rate=3e-4,
++            n_steps=2048,
++            batch_size=64,
++            n_epochs=10,
++            gamma=0.99,
++            gae_lambda=0.95,
++            clip_range=0.2,
++            normalize_advantage=True,
++            ent_coef=0.01,
++            vf_coef=0.5,
++            max_grad_norm=0.5,
++            use_sde=False,
++            sde_sample_freq=-1,
++            target_kl=None,
++            tensorboard_log=LOGS_DIR,
++            policy_kwargs=policy_kwargs,
++            verbose=LOG_LEVEL,
++            seed=RANDOM_SEED,
++            device="auto"
++        )
++
++    # 4) Add the main policy to the pool so it's not empty
++    opponent_pool.add_snapshot(model.policy, rating=1000, step=0)
+ 
+-    model.learn(
+-        total_timesteps=TOTAL_TIMESTEPS,
+-        callback=[checkpoint_callback, eval_callback, WandbCallback()],
+-        reset_num_timesteps=True,
+-        progress_bar=True
++    # 5) Create the real self-play environment (also 8-env)
++    vec_env = SubprocVecEnv([make_selfplay_env(i, RANDOM_SEED, opponent_pool, obs_normalizer)
++                             for i in range(NUM_ENV)])
++    
++    # 6) Switch model from dummy to real env
++    #    n_envs=8 => no mismatch
++    model.set_env(vec_env)
++
++    # 7) Optional: checkpoint callback
++    checkpoint_callback = CheckpointCallback(
++        save_freq=SAVE_FREQ // NUM_ENV,
++        save_path=MODELS_DIR,
++        name_prefix="bytefight_ppo",
++        save_replay_buffer=True,
++        save_vecnormalize=True,
+     )
+ 
+-    final_model_path = f"{MODELS_DIR}/bytefight_ppo_final"
++     # 8) Training loop
++    total_steps = 1_600_000
++    iteration = 0
++    its = 25
++    steps_per_iter = int(total_steps / its)
++
++    while iteration * steps_per_iter < total_steps:
++        print(f"Iteration {iteration+1}/{its}: training for {steps_per_iter} timesteps...")
++        model.learn(
++            total_timesteps=steps_per_iter,
++            progress_bar=True,
++            callback=[checkpoint_callback, wandb_callback],
++        )
++        
++        iteration += 1
++        current_step = iteration * steps_per_iter
++
++        # Add a new snapshot to the pool
++        opponent_pool.add_snapshot(model.policy, rating=1000, step=current_step)
++        print(f"[TRAIN] After {current_step} timesteps, pool size = {len(opponent_pool.snapshots)}")
++
++     # Final save
++    final_model_path = os.path.join(MODELS_DIR, "bytefight_ppo_league_final")
+     model.save(final_model_path)
+-    print(f"Training completed in {time.time() - start_time:.2f} seconds")
+-    print(f"Final model saved to: {final_model_path}")
++    print(f"Training complete. Final model saved: {final_model_path}")
++
++    # Optionally finish the wandb run
++    wandb.finish()
+ 
++    # Clean up
+     vec_env.close()
+-    eval_env.close()
++    dummy_subproc_env.close()
++
++if __name__ == "__main__":
++    main()

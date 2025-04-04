@@ -10,6 +10,9 @@ from stable_baselines3.common.utils import set_random_seed
 from stable_baselines3.common.monitor import Monitor
 import gymnasium as gym
 
+import wandb
+from wandb.integration.sb3 import WandbCallback
+
 # ------------------------------------------------------------------------------
 # Custom imports (modify these paths/names to match your actual files)
 from bytefight_env import ByteFightSnakeEnv
@@ -22,16 +25,14 @@ from opp_controller import OppController
 # Training parameters
 RANDOM_SEED = 42
 NUM_ENV = 8 #8
-TOTAL_TIMESTEPS = 2_500_000
-ITS = 35
+TOTAL_TIMESTEPS = 1_600_000
+ITS = 25
 STEPS_PER_ITER = int(TOTAL_TIMESTEPS / ITS)
 SAVE_FREQ = 50_000
 LOGS_DIR = "./logs"
 MODELS_DIR = "./models"
 SNAPSHOT_DIR = os.path.join(MODELS_DIR, "league_snapshots")
-#CHECKPOINT_PATH = os.path.join(MODELS_DIR, "bytefight_ppo_600000_steps.zip")  # If you have a pretrained model
-CHECKPOINT_PATH = os.path.join(MODELS_DIR, "none")  # If you have a pretrained model
-
+CHECKPOINT_PATH = os.path.join(MODELS_DIR, "bytefight_ppo_600000_steps.zip")  # If you have a pretrained model
 LOG_LEVEL = 1
 
 # Create directories
@@ -110,6 +111,35 @@ def make_selfplay_env(rank, seed, opponent_pool, obs_normalizer):
 # Main training script
 ############################################
 def main():
+    # 1. Create directories
+    os.makedirs(LOGS_DIR, exist_ok=True)
+    os.makedirs(MODELS_DIR, exist_ok=True)
+    os.makedirs(SNAPSHOT_DIR, exist_ok=True)
+    os.makedirs(os.path.join(LOGS_DIR, "eval"), exist_ok=True)
+
+    # 2. Initialize wandb
+    wandb.init(
+        project="bytefight_project",  # Set your wandb project name
+        config={
+            "total_timesteps": TOTAL_TIMESTEPS,
+            "learning_rate": 3e-4,
+            "batch_size": 64,
+            "n_steps": 2048,
+            "gamma": 0.99,
+            "gae_lambda": 0.95,
+            # add any other hyperparameters you want to track
+        },
+        sync_tensorboard=True,   # Sync TensorBoard logs with wandb
+        monitor_gym=True,          # Automatically log gym metrics
+        save_code=True,            # Optionally save a snapshot of your code
+    )
+
+    # Optional: create wandb callback
+    wandb_callback = WandbCallback(
+        model_save_path=MODELS_DIR,  # Path where models are saved
+        verbose=2,
+    )
+
     # 1) Create shared normalizer and an empty OpponentPool
     obs_normalizer = RunningNormalizer(dim=15, clip_value=5.0)
     opponent_pool = OpponentPool(snapshot_dir=SNAPSHOT_DIR, initial_policy=None, initial_rating=1000)
@@ -189,28 +219,34 @@ def main():
         save_vecnormalize=True,
     )
 
-    # 8) Training loop
+     # 8) Training loop
+    total_steps = 1_600_000
     iteration = 0
+    its = 25
+    steps_per_iter = int(total_steps / its)
 
-    while iteration * STEPS_PER_ITER < TOTAL_TIMESTEPS:
-        print(f"Iteration {iteration+1}/{ITS}: training for {STEPS_PER_ITER} timesteps...")
+    while iteration * steps_per_iter < total_steps:
+        print(f"Iteration {iteration+1}/{its}: training for {steps_per_iter} timesteps...")
         model.learn(
-            total_timesteps=STEPS_PER_ITER,
+            total_timesteps=steps_per_iter,
             progress_bar=True,
-            callback=[checkpoint_callback],
+            callback=[checkpoint_callback, wandb_callback],
         )
-
+        
         iteration += 1
-        current_step = iteration * STEPS_PER_ITER
+        current_step = iteration * steps_per_iter
 
         # Add a new snapshot to the pool
         opponent_pool.add_snapshot(model.policy, rating=1000, step=current_step)
         print(f"[TRAIN] After {current_step} timesteps, pool size = {len(opponent_pool.snapshots)}")
 
-    # Final save
+     # Final save
     final_model_path = os.path.join(MODELS_DIR, "bytefight_ppo_league_final")
     model.save(final_model_path)
     print(f"Training complete. Final model saved: {final_model_path}")
+
+    # Optionally finish the wandb run
+    wandb.finish()
 
     # Clean up
     vec_env.close()
