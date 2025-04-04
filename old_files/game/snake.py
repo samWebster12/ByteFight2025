@@ -68,7 +68,7 @@ class Snake:
         """
         Increments the sacrifice necessary for a move by 2.
         """
-        self.sacrifice += 1
+        self.sacrifice+=2
     
     def reset(self):
         """
@@ -299,13 +299,11 @@ class Snake:
 
         if(direction is None):
             direction = self.direction
-        
         if(direction is None):
             return [enum.value for enum in Action][:8]
 
-        
-        x = int (direction)
-        return [Action((x-2+8)%8), Action((x-1+8)%8), direction,  Action((x+1)%8),Action((x+2)%8)]
+        x = int (self.direction)
+        return [Action((x-2+8)%8), Action((x-1+8)%8),self.direction,  Action((x+1)%8),Action((x+2)%8)]
 
 
     def eat_apple(self):
@@ -494,7 +492,7 @@ class Snake:
 
     def push_head_cell(self, loc:np.ndarray):
         """
-        Enqueues the snake's new head location into the internal queue.
+        Enqueues the snake's new head location into the interanal queue.
 
         Parameters:  
             loc (numpy.ndarray): The head location to enqueue.

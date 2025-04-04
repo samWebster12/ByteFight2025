@@ -344,7 +344,7 @@ class ByteFightSnakeEnv(gym.Env):
         current_sacrifice = 0
         if move_count > 1:
             non_trap_moves = [act for act in self.current_actions if act != Action.TRAP]
-            current_sacrifice = (len(non_trap_moves)) * 2
+            current_sacrifice = (len(non_trap_moves))
 
         # Build the raw scalar features vector (15,)
         scalars = np.array([
@@ -566,7 +566,7 @@ class ByteFightSnakeEnv(gym.Env):
                 # (this is just an example shaping)
                 if len(self.current_actions) >= 1:
                     non_trap_moves = [act for act in self.current_actions if act != Action.TRAP]
-                    additional_sacrifice = max(0, len(non_trap_moves) - 1) * 2
+                    additional_sacrifice = max(0, len(non_trap_moves) - 1)
                     reward += additional_sacrifice * sacrifice_penalty
             else:
                 # TRAP penalty

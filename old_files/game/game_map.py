@@ -7,10 +7,9 @@ class Map:
     """
     def __init__(self, map_string):
         self.decay_timeline = [(1000, 15), (1600, 10),(1800,5), (1950, 2)]
-        self.trap_timeout = 100
+        self.trap_timeout = 50
         #initializes a map from map string
         self.map_string = map_string
-        self.trap_sacrifice = 3
 
         self.infos = map_string.split("#")
 
@@ -147,17 +146,14 @@ class Map:
             if(x, y) == reflection:
                 apple_count+=1
                 apples.append(np.array([turn_num, x, y])) 
+            elif self.cells_portals[y, x, 0] >= 0:
+                apple_count+=1
+                apples.append(np.array([turn_num, x, y])) 
+                apples.append(np.array([turn_num, self.cells_portals[y, x, 0], self.cells_portals[y, x, 1]]))  
             else:
                 apple_count+=2
                 apples.append(np.array([turn_num, x, y]))   
-                apples.append(np.array([turn_num, reflection[0], reflection[1]]))   
-
-            if self.cells_portals[y, x, 0] >= 0:
-                apples.append(np.array([turn_num, self.cells_portals[y, x, 0], self.cells_portals[y, x, 1]]))
-
-                if (x, y) != reflection:
-                    (x,y) = reflection    
-                    apples.append(np.array([turn_num, self.cells_portals[y, x, 0], self.cells_portals[y, x, 1]]))
+                apples.append(np.array([turn_num, reflection[0], reflection[1]]))         
 
             i+=1
 

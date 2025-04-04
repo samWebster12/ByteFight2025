@@ -41,17 +41,17 @@ Tiebreaks occur if the turn count reaches 2000 and is determined in the followin
 **Moves:**  
 Snakes must move at least once on their turn. Snakes can move in directions that are at most 90 degrees away from the direction they are currently facing. Moving in a direction will face you in that direction. For example if a snake is currently facing north, on its next move it can move west, northwest, north, northeast, and east. Players can move in any direction if they have not taken a move yet during the game.
 
-The first move a snake takes on its turn, it will first lose 1 length first at its tail, then gain 1 length at the new head position, preserving its total length. Every subsequent move during the turn will increase the sacrifice **+1**. So, the first move on a turn will sacrifice a total of zero length. The next move on the turn will sacrifice 2 length at the tail and gain 1 at the head, for a total of 1 length lost. The next move on the turn will sacrifice 3 length at the tail and gain 1 length at the head, for a total of 2 length lost. 
+The first move a snake takes on its turn, it will first lose 1 length first at its tail, then gain 1 length at the new head position, preserving its total length. Every subsequent move during the turn will increase the sacrifice **+2**. So, the first move on a turn will sacrifice a total of zero length. The next move on the turn will sacrifice 3 length at the tail and gain 1 at the head, for a total of 2 length lost. The next move on the turn will sacrifice 5 length at the tail and gain 1 length at the head, for a total of 4 length lost. 
 
 **First Move:**  
 Players will bid length at the beginning of the game to have the first turn. Whoever bids higher will have the bid applied to them (they will lose length equal to how much they bid). Nothing will happen for the person who loses the bid. If both players bid the same amount, the person who wins the bid is decided by a coin toss.
 
 **Traps:**  
-A snake can sacrifice one of its unqueued length as an action to leave behind a trap at its current tail. Only unqueued length beyond 2 may be used to deploy a trap. For example, if your snake occupies two physical squares but had 4 length queued, you would not be able to leave a trap. Traps last on a tile for 100 turns following placement.
+A snake can sacrifice one of its unqueued length as an action to leave behind a trap at its current tail. Only unqueued length beyond 2 may be used to deploy a trap. For example, if your snake occupies two physical squares but had 4 length queued, you would not be able to leave a trap. Traps last on a tile for 50 turns following placement.
 
 The total number of traps that you are allowed to place on a single turn is limited to half the max length you have achieved (including both unqueued and queued length), rounded down.
 
-In the event that the opposing snake moves onto a square containing one of your traps, they will lose 3 length. In the event that your snake's head moves onto a square containing one of your traps, the trap's lifetime will be refreshed and it will last another 100 rounds.
+In the event that the opposing snake moves onto a square containing one of your traps, they will lose 2 length. In the event that your snake's head moves onto a square containing one of your traps, the trap's lifetime will be refreshed and it will last another 50 rounds.
 
 ## The Map
 Maps will be either vertically, horizontally, or rotationally symmetric. Map dimensions will be, at smallest, 8x8 and at largest 64x64. A set number of apples will spawn at set turn intervals (10-200, always odd). Where and when apples will spawn will be known to players at the beginning of the game.

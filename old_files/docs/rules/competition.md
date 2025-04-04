@@ -19,7 +19,7 @@ Balance updates may occur to the game on a weekly basis, changing numbers in the
 ## Prizes
 To be awarded at the final tournament:
 
-* **1st Place** - Two Keychron (barebones) mechanical keyboards, $150 toward your choice of keycaps and switches, Commemorative Plaque
+* **1st Place** - Two QK75 (barebones) mechanical keyboards, $150 toward your choice of keycaps and switches, Commemorative Plaque
 * **2nd Place** - Two Bridge75 mechanical keyboards, Commemorative Plaque
 * **3rd Place** - Commemorative Plaque
 
