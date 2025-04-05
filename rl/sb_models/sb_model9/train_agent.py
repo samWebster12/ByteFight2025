@@ -201,10 +201,19 @@ def main():
 
     # 8) Training loop
     iteration = 0
+    metadata_file = os.path.join(SNAPSHOT_DIR, "ratings.json")
+    if os.path.exists(metadata_file):
+        with open(metadata_file, "r") as f:
+            snapshots_meta = json.load(f)
+        print(f"[OPPONENT POOL] Loaded metadata from {metadata_file}")
+    else:
+        snapshots_meta = []
+
+    snapshots_len = len(snapshots_meta) - 1
 
     while iteration * STEPS_PER_ITER < TOTAL_TIMESTEPS:
         print(f"Iteration {iteration+1}/{ITS}: training for {STEPS_PER_ITER} timesteps...")
-        rating_callback = RatingUpdateCallback(opponent_pool, main_agent_idx=iteration, verbose=1)
+        rating_callback = RatingUpdateCallback(opponent_pool, main_agent_idx=iteration + snapshots_len, verbose=1)
         model.learn(
             total_timesteps=STEPS_PER_ITER,
             progress_bar=True,
@@ -216,7 +225,7 @@ def main():
 
         # Add a new snapshot to the pool
         opponent_pool.add_snapshot(model.policy, rating=1000, step=current_step)
-        print(f"[TRAIN] After {current_step} timesteps, pool size = {len(opponent_pool.snapshots)}")
+        print(f"[TRAIN] After {current_step} timesteps, pool size = {len(opponent_pool.snapshots_meta)}")
 
         model_path = f"{MODELS_DIR}/league_its/it{iteration}"
         model.save(model_path)

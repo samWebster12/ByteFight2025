@@ -426,20 +426,19 @@ class ByteFightSnakeEnv(gym.Env):
             self.board.next_turn()
         
 
-        # In your environment reset() method:
-        if self.opponent_pool.snapshots:
+        if self.opponent_pool.snapshots_meta:
             # Use the rating from the newest snapshot as main_rating
-            main_rating = self.opponent_pool.snapshots[-1][1]
+            main_rating = self.opponent_pool.snapshots_meta[-1]["rating"]
             # Exclude the newest snapshot (if there’s more than one)
-            if len(self.opponent_pool.snapshots) > 1:
-                exclude_idx = len(self.opponent_pool.snapshots) - 1
+            if len(self.opponent_pool.snapshots_meta) > 1:
+                exclude_id = self.opponent_pool.snapshots_meta[-1]["id"]
             else:
-                exclude_idx = None
+                exclude_id = None
         else:
             main_rating = None
-            exclude_idx = None
+            exclude_id = None
 
-        opp_policy, opp_index = self.opponent_pool.sample_opponent(main_rating=main_rating, exclude_idx=exclude_idx)
+        opp_policy, opp_index = self.opponent_pool.sample_opponent(main_rating=main_rating, exclude_id=exclude_id)
 
         # 2) Create a new SelfPlayOppController with that snapshot 
         self.opponent_controller = SelfPlayOppController(

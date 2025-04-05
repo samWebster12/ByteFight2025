@@ -8,7 +8,7 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.utils import set_random_seed
 
 # Import your custom components (updated for 10-action absolute space)
-from bytefight_env import ByteFightSnakeEnv
+from old_bytefight_env import ByteFightSnakeEnv
 from custom_policy3 import ByteFightMaskedPolicy, ByteFightFeaturesExtractor
 from opp_controller import OppController
 
@@ -206,11 +206,11 @@ def save_gameplay_video(frames_list, filename, fps=10):
 
 if __name__ == "__main__":
     # Path to the trained model
-    model_path = "models/it5"
+    model_path = "models/it50"
     
     # Evaluation settings
     #map_names = ["empty"]
-    num_episodes = 40
+    num_episodes = 20
     render = False
     save_video = False
     print(f"Evalutating model: {model_path}.zip")
