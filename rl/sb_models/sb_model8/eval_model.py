@@ -206,7 +206,7 @@ def save_gameplay_video(frames_list, filename, fps=10):
 
 if __name__ == "__main__":
     # Path to the trained model
-    model_path = "models/it50"
+    model_path = "models/it19"
     
     # Evaluation settings
     #map_names = ["empty"]

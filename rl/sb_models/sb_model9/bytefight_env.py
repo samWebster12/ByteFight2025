@@ -438,15 +438,18 @@ class ByteFightSnakeEnv(gym.Env):
             main_rating = None
             exclude_id = None
 
-        opp_policy, opp_index = self.opponent_pool.sample_opponent(main_rating=main_rating, exclude_id=exclude_id)
-
-        # 2) Create a new SelfPlayOppController with that snapshot 
-        self.opponent_controller = SelfPlayOppController(
-            policy=opp_policy, 
-            obs_normalizer=self.obs_normalizer
-        )
+        opp_controller, opp_index, opp_type = self.opponent_pool.sample_opponent(main_rating=main_rating, exclude_id=exclude_id)
+        if opp_type == "policy":
+            # 2) Create a new SelfPlayOppController with that snapshot 
+            self.opponent_controller = SelfPlayOppController(
+                policy=opp_controller, 
+                obs_normalizer=self.obs_normalizer
+            )
+        else:
+            self.opponent_controller = opp_controller
 
         self._opponent_index = opp_index  # store so we know which snapshot we used
+        self._opponent_type = opp_type
 
         self.current_actions = []
         self.done = False

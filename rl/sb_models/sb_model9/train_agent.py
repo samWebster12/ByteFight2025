@@ -20,18 +20,26 @@ from opp_controller import OppController
 from rating_update_callback import RatingUpdateCallback
 # ------------------------------------------------------------------------------
 
+from controllers.custom1_controller import PlayerControllerCustom1
+from controllers.custom2_controller import PlayerControllerCustom2
+from controllers.lect_controller import PlayerControllerLect
+from controllers.mcts1_controller import PlayerControllerMCTS1
+from controllers.mcts3controller import PlayerControllerMCTS3
+from controllers.minimax_controller import PlayerControllerMinimax
+from controllers.sample_controller import PlayerControllerSample
+
 # Training parameters
 RANDOM_SEED = 42
 NUM_ENV = 8 #8
-TOTAL_TIMESTEPS = 2_500_000
-ITS = 200
+TOTAL_TIMESTEPS = 10_000_000
+ITS = 800
 STEPS_PER_ITER = int(TOTAL_TIMESTEPS / ITS)
 SAVE_FREQ = 50_000
 LOGS_DIR = "./logs"
 MODELS_DIR = "./models"
 SNAPSHOT_DIR = os.path.join(MODELS_DIR, "league_snapshots")
-#CHECKPOINT_PATH = os.path.join(MODELS_DIR, "bytefight_ppo_600000_steps.zip")  # If you have a pretrained model
-CHECKPOINT_PATH = os.path.join(MODELS_DIR, "none")  # none
+CHECKPOINT_PATH = os.path.join(MODELS_DIR, "league_its/it51.zip")  # If you have a pretrained model
+#CHECKPOINT_PATH = os.path.join(MODELS_DIR, "none")  # none
 
 LOG_LEVEL = 1
 
@@ -180,7 +188,24 @@ def main():
         )
 
     # 4) Add the main policy to the pool so it's not empty
-    opponent_pool.add_snapshot(model.policy, rating=1000, step=0)
+    player_controller_sample = PlayerControllerSample(1)
+    player_controller_lect = PlayerControllerLect(1)
+    player_controller_custom1 = PlayerControllerCustom1(1)
+    player_controller_custom2 = PlayerControllerCustom2(1)
+    #player_controller_mcts1 = PlayerControllerMCTS1(1)
+    player_controller_mcts3 = PlayerControllerMCTS3(1)
+    player_controller_minimax = PlayerControllerMinimax(1)
+
+
+    opponent_pool.add_controller_snapshot(player_controller_sample, rating=1000, step=0)
+    opponent_pool.add_controller_snapshot(player_controller_lect, rating=1000, step=0)
+    opponent_pool.add_controller_snapshot(player_controller_custom1, rating=1000, step=0)
+    opponent_pool.add_controller_snapshot(player_controller_custom2, rating=1000, step=0)
+    #opponent_pool.add_controller_snapshot(player_controller_mcts1, rating=1000, step=0)
+    opponent_pool.add_controller_snapshot(player_controller_mcts3, rating=1000, step=0)
+    opponent_pool.add_controller_snapshot(player_controller_minimax, rating=1000, step=0)
+
+    opponent_pool.add_policy_snapshot(model.policy, rating=1000, step=0)
 
     # 5) Create the real self-play environment (also 8-env)
     vec_env = SubprocVecEnv([make_selfplay_env(i, RANDOM_SEED, opponent_pool, obs_normalizer)
@@ -224,7 +249,7 @@ def main():
         current_step = iteration * STEPS_PER_ITER
 
         # Add a new snapshot to the pool
-        opponent_pool.add_snapshot(model.policy, rating=1000, step=current_step)
+        opponent_pool.add_policy_snapshot(model.policy, rating=1000, step=current_step)
         print(f"[TRAIN] After {current_step} timesteps, pool size = {len(opponent_pool.snapshots_meta)}")
 
         model_path = f"{MODELS_DIR}/league_its/it{iteration}"

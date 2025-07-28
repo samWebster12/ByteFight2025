@@ -4,6 +4,9 @@
 workspace/deeprl/deeprl1/onnxrt_lib
 workspace/deeprl/deeprl1/tmponnx
 
+**/logs/
+**/league_snapshots/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
