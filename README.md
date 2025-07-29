@@ -4,7 +4,7 @@
 
 ByteFight 2025 is a head‑to‑head arena inspired by the classic *Snake* but adds variable maps, multi-move movements and direct combat with the goal to survive longer than you're oppponent. Each bot receives the complete board state every tick and must attempt to stay alive for as long as possible without running out of time.
 
-This repository contains ``, my reinforcement‑learning (RL) solution that climbed to the top‑10 after just several days of training.
+This repository contains my reinforcement‑learning (RL) solution that climbed to the top‑10 after just several days of training.
 
 ---
 
