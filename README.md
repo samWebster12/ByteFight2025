@@ -43,5 +43,5 @@ ByteFight finals ran on stripped‑down Docker images with **no** PyTorch, Gymna
 
 ## License
 
-MIT – see `LICENSE` for details. Feel free to fork, learn, and build a stronger serpent! 🚀
+MIT – see `LICENSE` for details. Feel free to fork, learn! 🚀
 
