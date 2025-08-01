@@ -1,6 +1,6 @@
 # ByteFight 2025 – Reinforcement‑Learning Agent
 
-> **Competition:** [Georgia Tech ByteFight 2025](https://bytefight2025.gatech.edu)  •  **Final Rank:** **8ᵗʰ**
+> **Competition:** [Georgia Tech ByteFight 2025](https://bytefight.org)  •  **Final Rank:** **8ᵗʰ**
 
 ByteFight 2025 is a head‑to‑head arena inspired by the classic *Snake* but adds variable maps, multi-move movements and direct combat with the goal to survive longer than you're oppponent. Each bot receives the complete board state every tick and must attempt to stay alive for as long as possible without running out of time.
 
